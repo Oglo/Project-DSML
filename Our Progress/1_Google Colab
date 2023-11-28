@@ -6,3 +6,5 @@ along with its precision displayed on Kaggle.
 For our First try we will start by doing a OneHotEncoder on our
 train dataframe and then we will predict the difficulty of the texts
 by training our model.
+
+(We are currently modifying this file)
