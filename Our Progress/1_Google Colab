@@ -2,3 +2,7 @@ Initially, the idea of developing our project on Google Colab emerged.
 This platform offers us an opportunity to collaborate on a common file.
 Within our Colab, we structured our work by attributing a distinct title to each method used, 
 along with its precision displayed on Kaggle.
+
+For our First try we will start by doing a OneHotEncoder on our
+train dataframe and then we will predict the difficulty of the texts
+by training our model.
