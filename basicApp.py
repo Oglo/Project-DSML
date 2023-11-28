@@ -1,7 +1,9 @@
 import streamlit as st
 
 # Chemin vers votre fichier logo (par exemple, 'logo.png')
-logo = "C:\\Users\\antoi\\OneDrive\\Bureau\\logomigros-removebg-preview.png"
+logo = "C:/Users/antoi/OneDrive/Bureau/logomigros-removebg-preview.png"
+
+
 
 
 # Utilisation de colonnes pour aligner le logo et le titr
