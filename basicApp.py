@@ -1,7 +1,7 @@
 import streamlit as st
 
 # Chemin vers votre fichier logo (par exemple, 'logo.png')
-logo = "C:\Users\antoi\OneDrive\Bureau\logomigros-removebg-preview.png"
+logo = "Users/antoi/OneDrive/Bureau/logomigros-removebg-preview.png"
 
 # Utilisation de colonnes pour aligner le logo et le titre
 col1, col2 = st.beta_columns([1, 10])
