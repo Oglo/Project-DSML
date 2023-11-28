@@ -1,4 +1,5 @@
-pyimport streamlit as st
+py
+import streamlit as st
 
 st.title('Our First app')
 st.write('Hello World')
