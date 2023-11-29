@@ -6,5 +6,5 @@ Here you'll find all the files we've worked on to enable us to have a program th
 If you want to learn more about all the work we've done, and how we arrived at this result, I'll let you browse the various folders contained in our GitHub.
 
 
-![Alt text](logomail.png) antoine.oglobleff@unil.ch
-![Alt text](logomail.png) manuel.solazzo@unil.ch
+![Alt text](https://raw.githubusercontent.com/Oglo/Project-DSML/main/Code/images/logomail.png) antoine.oglobleff@unil.ch
+![Alt text](https://raw.githubusercontent.com/Oglo/Project-DSML/main/Code/images/logomail.png) manuel.solazzo@unil.ch
