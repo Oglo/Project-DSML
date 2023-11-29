@@ -1,7 +1,7 @@
 import streamlit as st
 
-# URL de l'image sur GitHub
-logo_url = "https://github.com/Oglo/Project-DSML/blob/main/Code/images/logomigros-removebg-preview.png"
+# URL de l'image sur GitHub en mode raw
+logo_url = "https://raw.githubusercontent.com/Oglo/Project-DSML/main/Code/images/logomigros-removebg-preview.png"
 
 # Utilisation de colonnes pour aligner le logo et le titre
 col1, col2 = st.columns([1, 10])
