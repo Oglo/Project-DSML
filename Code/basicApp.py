@@ -7,7 +7,7 @@ logo_url = "https://raw.githubusercontent.com/Oglo/Project-DSML/main/Code/images
 col1, col2 = st.columns([1, 10])
 
 with col1:
-    st.image(logo_url, width=50)  # Ajustez la largeur selon vos besoins
+    st.image(logo_url, width=300)  # Ajustez la largeur selon vos besoins
 
 with col2:
     st.title('Team Migros')
