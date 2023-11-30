@@ -22,4 +22,4 @@ with col2:
     st.image(logo_img, width=100)  # Ajustez la largeur selon vos besoins
 
 # Autres éléments de la page
-st.write('Hello World')
+st.write('Hello World2')
