@@ -36,12 +36,12 @@ precision = st.radio("Choisissez le taux de précision :", ('25%', '40%', '50%',
 
 # Affichage de la méthode en fonction du taux de précision sélectionné
 if precision == '25%':
-    st.write("Méthodes pour 25% de précision : [Liste des méthodes]")
+    st.write("None")
 elif precision == '40%':
-    st.write("Méthodes pour 40% de précision : [Liste des méthodes]")
+    st.write("None")
 elif precision == '50%':
-    st.write("Méthodes pour 50% de précision : Méthode 4 (49% de précision)")
+    st.write("Méthode TF-IF (49% de précision)")
 elif precision == '55%':
-    st.write("Méthodes pour 55% de précision : [Liste des méthodes]")
+    st.write("None")
 elif precision == '65%':
-    st.write("Méthodes pour 65% de précision : [Liste des méthodes]")
+    st.write("None")
