@@ -25,3 +25,23 @@ for _ in range(5):
 
 # Affichage du texte 'Hello World2'
 st.write('Welcome to the Migros Team streamlit application!With this platform, you will be able to choose the precision you want in predicting the language level of your text.')
+
+# ... [le reste de votre code existant]
+
+# Espacement
+st.write("")
+
+# Création des boutons pour choisir le taux de précision
+precision = st.radio("Choisissez le taux de précision :", ('25%', '40%', '50%', '55%', '65%'))
+
+# Affichage de la méthode en fonction du taux de précision sélectionné
+if precision == '25%':
+    st.write("Méthodes pour 25% de précision : [Liste des méthodes]")
+elif precision == '40%':
+    st.write("Méthodes pour 40% de précision : [Liste des méthodes]")
+elif precision == '50%':
+    st.write("Méthodes pour 50% de précision : Méthode 4 (49% de précision)")
+elif precision == '55%':
+    st.write("Méthodes pour 55% de précision : [Liste des méthodes]")
+elif precision == '65%':
+    st.write("Méthodes pour 65% de précision : [Liste des méthodes]")
