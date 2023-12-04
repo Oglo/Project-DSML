@@ -56,6 +56,6 @@ user_input = st.text_input("Entrez le nom de la méthode pour obtenir des détai
 
 # Vérification de la saisie de l'utilisateur et affichage de la réponse
 if user_input.lower() == 'méthode 4':
-    st.write("ICD vaut 24 points pour égale.")
+    st.write("Tout le code nécessaire pour run la méthode 4")
 
 # Vous pouvez ajouter d'autres conditions pour d'autres méthodes si nécessaire
