@@ -10,16 +10,23 @@ logo_url = "https://raw.githubusercontent.com/Oglo/Project-DSML/main/Code/images
 response = requests.get(logo_url)
 logo_img = Image.open(BytesIO(response.content))
 
-# Utilisation de colonnes pour aligner le titre et le logo
-col1, col2 = st.columns([2, 1])
-
-with col1:
-    # Affichage du titre 'Team'
-    st.markdown("<h1 style='display: inline-block'>Team</h1>", unsafe_allow_html=True)
-
-with col2:
-    # Affichage du logo
-    st.image(logo_img, width=100)  # Ajustez la largeur selon vos besoins
+# Utilisation de HTML pour aligner le titre et le logo
+st.markdown("""
+    <style>
+        .container {
+            display: flex;
+            align-items: center;
+        }
+        .logo {
+            width: 100px; /* Ajustez la largeur selon vos besoins */
+            margin-left: 10px;
+        }
+    </style>
+    <div class="container">
+        <h1 style='display: inline-block'>Team</h1>
+        <img src="%s" class="logo">
+    </div>
+""" % logo_url, unsafe_allow_html=True)
 
 # Autres éléments de la page
 st.write('Hello World2')
