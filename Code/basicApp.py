@@ -17,11 +17,11 @@ with col2:  # Utilisation de la colonne centrale
     # Affichage du titre 'Team' centré
     st.markdown("<h1 style='text-align: center'>Team</h1>", unsafe_allow_html=True)
 
-    # Affichage de l'image centrée sous le titre
+    
     st.image(logo_img)
 
-for _ in range(5):  # Ajustez le nombre 5 pour augmenter ou diminuer l'espace
+for _ in range(5):  
     st.write("")
 
 # Affichage du texte 'Hello World2'
-st.write('Hello World2')
+st.write('Welcome to the Migros Team streamlit application!With this platform, you will be able to choose the precision you want in predicting the language level of your text.')
