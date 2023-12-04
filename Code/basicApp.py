@@ -20,5 +20,8 @@ with col2:  # Utilisation de la colonne centrale
     # Affichage de l'image centrée sous le titre
     st.image(logo_img)
 
-# Autres éléments de la page
+for _ in range(5):  # Ajustez le nombre 5 pour augmenter ou diminuer l'espace
+    st.write("")
+
+# Affichage du texte 'Hello World2'
 st.write('Hello World2')
