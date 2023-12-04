@@ -18,8 +18,8 @@ st.markdown("""
             align-items: center;
         }
         .logo {
-            width: 100px; /* Ajustez la largeur selon vos besoins */
-            margin-left: 10px;
+            width: 150px; /* Augmentez la largeur pour un logo plus grand */
+            margin-left: 5px; /* Réduisez la marge pour déplacer le logo vers la gauche */
         }
     </style>
     <div class="container">
