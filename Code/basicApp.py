@@ -56,6 +56,14 @@ user_input = st.text_input("Entrez le nom de la méthode pour obtenir des détai
 
 # Vérification de la saisie de l'utilisateur et affichage de la réponse
 if user_input.lower() == 'méthode tf-if':
-    st.write("Tout le code nécessaire pour run la méthode TF-IF")
+    texte1 = "Tout le code nécessaire pour run la méthode TF-IF"
+    st.write(texte1)
+
+    st.markdown(f"""
+        <textarea id="text_to_copy" style="display: none;">{texte1}</textarea>
+        <button onclick="navigator.clipboard.writeText(document.getElementById('text_to_copy').value)">
+            Copier le texte
+        </button>
+    """, unsafe_allow_html=True)
 
 # Vous pouvez ajouter d'autres conditions pour d'autres méthodes si nécessaire
