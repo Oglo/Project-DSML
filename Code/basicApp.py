@@ -19,7 +19,7 @@ st.markdown("""
         }
         .logo {
             width: 150px; /* Augmentez la largeur pour un logo plus grand */
-            margin-left: 5px; /* Réduisez la marge pour déplacer le logo vers la gauche */
+            margin-left: 1px; /* Réduisez la marge pour déplacer le logo vers la gauche */
         }
     </style>
     <div class="container">
