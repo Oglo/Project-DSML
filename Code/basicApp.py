@@ -1,6 +1,6 @@
 import streamlit as st
-from PIL import Image
 import requests
+from PIL import Image
 from io import BytesIO
 
 # URL de l'image sur GitHub en mode raw
@@ -10,23 +10,11 @@ logo_url = "https://raw.githubusercontent.com/Oglo/Project-DSML/main/Code/images
 response = requests.get(logo_url)
 logo_img = Image.open(BytesIO(response.content))
 
-# Utilisation de HTML pour centrer le titre et l'image
-st.markdown("""
-    <style>
-        .title {
-            text-align: center;
-            font-size: 50px; /* Ajustez la taille de police si nécessaire */
-        }
-        .logo {
-            display: block;
-            margin-left: auto;
-            margin-right: auto;
-            width: 50%; /* Ajustez la largeur de l'image si nécessaire */
-        }
-    </style>
-    <div class="title">Team</div>
-    <img src="%s" class="logo">
-""" % logo_url, unsafe_allow_html=True)
+# Affichage du titre 'Team' centré
+st.markdown("<h1 style='text-align: center'>Team</h1>", unsafe_allow_html=True)
+
+# Affichage de l'image centrée sous le titre
+st.image(logo_img, width=200, use_column_width=True)  # Ajustez la largeur selon vos besoins
 
 # Autres éléments de la page
 st.write('Hello World2')
