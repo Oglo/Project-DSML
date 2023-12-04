@@ -14,7 +14,7 @@ logo_img = Image.open(BytesIO(response.content))
 st.markdown("<h1 style='text-align: center'>Team</h1>", unsafe_allow_html=True)
 
 # Affichage de l'image centrée sous le titre
-st.image(logo_img, width=100, use_column_width=False)  # Ajustez la largeur selon vos besoins
+st.image(logo_img, width=200, use_column_width=False)  # Ajustez la largeur selon vos besoins
 
 # Autres éléments de la page
 st.write('Hello World2')
