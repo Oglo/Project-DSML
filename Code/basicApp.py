@@ -10,22 +10,22 @@ logo_url = "https://raw.githubusercontent.com/Oglo/Project-DSML/main/Code/images
 response = requests.get(logo_url)
 logo_img = Image.open(BytesIO(response.content))
 
-# Utilisation de HTML pour aligner le titre et le logo
+# Utilisation de HTML pour centrer le titre et l'image
 st.markdown("""
     <style>
-        .container {
-            display: flex;
-            align-items: center;
+        .title {
+            text-align: center;
+            font-size: 50px; /* Ajustez la taille de police si nécessaire */
         }
         .logo {
-            width: 150px; /* Augmentez la largeur pour un logo plus grand */
-            margin-left: 1px; /* Réduisez la marge pour déplacer le logo vers la gauche */
+            display: block;
+            margin-left: auto;
+            margin-right: auto;
+            width: 50%; /* Ajustez la largeur de l'image si nécessaire */
         }
     </style>
-    <div class="container">
-        <h1 style='display: inline-block'>Team</h1>
-        <img src="%s" class="logo">
-    </div>
+    <div class="title">Team</div>
+    <img src="%s" class="logo">
 """ % logo_url, unsafe_allow_html=True)
 
 # Autres éléments de la page
