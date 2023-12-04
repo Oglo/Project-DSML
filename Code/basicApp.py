@@ -45,3 +45,17 @@ elif precision == '55%':
     st.write("None")
 elif precision == '65%':
     st.write("None")
+
+
+
+# Espacement
+st.write("")
+
+# Création d'un champ de saisie de texte pour que l'utilisateur puisse entrer le nom d'une méthode
+user_input = st.text_input("Entrez le nom de la méthode pour obtenir des détails :", "")
+
+# Vérification de la saisie de l'utilisateur et affichage de la réponse
+if user_input.lower() == 'méthode 4':
+    st.write("ICD vaut 24 points pour égale.")
+
+# Vous pouvez ajouter d'autres conditions pour d'autres méthodes si nécessaire
