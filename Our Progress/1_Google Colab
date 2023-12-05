@@ -5,6 +5,17 @@ along with its precision displayed on Kaggle.
 
 For our First try we will start by doing a OneHotEncoder on our
 train dataframe and then we will predict the difficulty of the texts
-by training our model.
+by training our model. Cette méthode nous à donnée une précision d'environ 45%. Pour une première c'était déjà bien, mais on savait qu'il nous restait encore un long chemin à parcourir.
+
+Nous nous élançons alors directement pour un deuxième essaie,
+Here we tried to do something with Torch in order to have a better model but it wasn't concluant.
+On a eu a peu près la même précision que le model précédent.
+A partir de là, on savait qu'on aller devoir tout essayer.
+On avait besoin tout d'abord de trouver le meilleur modèle possible, 
+afin qu'on puisse l'optimiser et l'améliorer par la suite.
+
+A ce moment, on va essayer plein de technique de prédiction différentes.
+3e essaie, We tried here to use the Bert method but we need to adjust
+the model because the execution due to huge data that we have to train require a 5 hours running. 4e, We used the Random Forest Classifier but it was less efficient so we didn't even submit it. Toujours pas très concluant, nous avons obtenus une précision d'environ 36%. 5e test, Here we understood that with our basic approach, it's not going to be enough so we tried to add the LLM with OpenAI. Mais on a réussi à le faire fonctionner
 
 (We are currently modifying this file)
