@@ -1,37 +1,63 @@
 import streamlit as st
 import requests
-from joblib import load
-import tempfile
+from PIL import Image  # Importer PIL pour ouvrir des images
+from io import BytesIO  # Importer BytesIO (corrigez 'import BytesIO')
 
-# Fonction pour télécharger le modèle depuis GitHub
-def download_model(url):
-    r = requests.get(url, allow_redirects=True)
-    if r.status_code == 200:
-        f = tempfile.NamedTemporaryFile(delete=False, suffix='.joblib')
-        f.write(r.content)
-        f.close()
-        return f.name
-    else:
-        return None
 
-# URL du modèle sur GitHub
-model_url = 'https://github.com/Oglo/Project-DSML/raw/main/Streamlit/language_level_classifier.joblib'
+# URL de l'image sur GitHub en mode raw
+logo_url = "https://raw.githubusercontent.com/Oglo/Project-DSML/main/Code/images/logomigros.png"
 
-# Télécharger le modèle
-model_path = download_model(model_url)
-if model_path:
-    model = load(model_path)
-else:
-    st.error("Erreur lors du téléchargement du modèle")
-    st.stop()
+# Télécharger l'image depuis l'URL
+response = requests.get(logo_url)
+logo_img = Image.open(BytesIO(response.content))
 
-# Interface Streamlit
-st.title("Prédiction du Niveau de Langue Française")
-text = st.text_area("Entrez votre texte ici:")
+# Création d'une structure de colonnes pour aligner le titre et l'image
+col1, col2, col3 = st.columns([1, 2, 1])
 
-if st.button('Prédire'):
-    if text:
-        prediction = model.predict([text])[0]
-        st.success(f"Le niveau de langue prédit est: {prediction}")
-    else:
-        st.error("Veuillez entrer un texte.")
+with col2:  # Utilisation de la colonne centrale
+    # Affichage du titre 'Team' centré
+    st.markdown("<h1 style='text-align: center'>Team</h1>", unsafe_allow_html=True)    
+    st.image(logo_img)
+
+for _ in range(5):  
+    st.write("")
+
+# Affichage du texte d'accueil
+st.write('Welcome to the Migros Team streamlit application! With this platform, you will be able to choose the precision you want in predicting the language level of your text.')
+
+# Espacement
+st.write("")
+
+# Création des boutons pour choisir le taux de précision
+precision = st.radio("Choisissez le taux de précision :", ('25%', '40%', '50%', '55%', '65%'))
+
+# Affichage de la méthode en fonction du taux de précision sélectionné
+if precision == '25%':
+    st.write("None")
+elif precision == '40%':
+    st.write("None")
+elif precision == '50%':
+    st.write("Méthode TF-IF (49% de précision)")
+elif precision == '55%':
+    st.write("None")
+elif precision == '65%':
+    st.write("None")
+
+# Espacement
+st.write("")
+
+# Création d'un champ de saisie de texte pour que l'utilisateur puisse entrer le nom d'une méthode
+user_input = st.text_input("Entrez le nom de la méthode pour obtenir des détails :", "")
+
+# Vérification de la saisie de l'utilisateur et affichage de la réponse
+if user_input.lower() == 'méthode tf-if':
+    texte1 = "Tout le code nécessaire pour run la méthode TF-IF"
+    st.write(texte1)
+
+    # Bouton pour copier le texte
+    st.markdown(f"""
+        <textarea id="text_to_copy" style="display: none;">{texte1}</textarea>
+        <button onclick="navigator.clipboard.writeText(document.getElementById('text_to_copy').value)">
+            Copier le texte
+        </button>
+    """, unsafe_allow_html=True)
