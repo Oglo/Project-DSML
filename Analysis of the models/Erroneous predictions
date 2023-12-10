@@ -1,22 +1,48 @@
-In order to find the best model, we had to make multiple assumptions and use a lot of differnet models. Of course, some were good and some were catastrophic, so in this section, we would like to analyze the worst models that we use and maybe explain why they were so terrible compare to the other ones.
-Please, note that if you want to read the analysis about our best model you can click on this [[[[[link]]]]] to access it directly.
+In order to find the best model, we had to make multiple assumptions and use
+a lot of differnet models. Of course, some were good and some were catastrophic,
+so in this section, we would like to analyze the worst models that we use and 
+maybe explain why they were so terrible compare to the other ones.
+
+Please, note that if you want to read the analysis about our
+best model you can click on this [[[[[link]]]]] to access it directly.
 
 RandomForestClassifier (accuracy of 36.5%) :
 
 Predicting the difficulty of text using RandomForestClassifier faces several difficulties. 
-Firstly, the model lacks context sensitivity; it struggles to grasp the nuances of language, like figurative speech or complex grammatical structures. This means that the model is a good model if we have to predict with numerical data, but when we have textual data the model is not powerful. 
-Secondly, relying on TfidfVectorizer for text transformation has its limits. It focuses on word frequency but misses out on context and word order which is a crucial aspect if we want to understand text complexity, because the complexit of a text rely on his syntax and not only the words that are used.
+Firstly, the model lacks context sensitivity; it struggles to grasp the nuances of language,
+like figurative speech or complex grammatical structures. This means that the model is a good
+model if we have to predict with numerical data, but when we have textual data the model is
+not powerful. 
 
-Overfitting is another issue. RandomForest, with its decision trees, can get too tailored to the training data, hindering its performance on new, unseen texts. Also, the quality and diversity of training data are key. A limited dataset might bias the model's learning, affecting the model accuracy.
+Secondly, relying on TfidfVectorizer for text transformation has its limits.
+It focuses on word frequency but misses out on context and word order which is 
+a crucial aspect if we want to understand text complexity, because the complexit
+of a text rely on his syntax and not only the words that are used.
+
+Overfitting is another issue. RandomForest, with its decision trees,
+can get too tailored to the training data, hindering its performance on new,
+unseen texts. Also, the quality and diversity of training data are key.
+A limited dataset might bias the model's learning, affecting the model accuracy.
 
 
 Logitic regression (accuracy of 45.5%) :
 
-Using Logistic Regression with TF-IDF for predicting the difficulty of texts also presents some difficulties. 
-One key issue is the TF-IDF model's focus on word frequency. While this approach captures the importance of certain words, it overlooks the context and sequence of words, which are critical in determining text complexity.
+Using Logistic Regression with TF-IDF for predicting the difficulty of texts also
+presents some difficulties. 
+One key issue is the TF-IDF model's focus on word frequency. While this approach
+captures the importance of certain words, it overlooks the context and sequence of words,
+which are critical in determining text complexity.
 
-Logistic Regression, although effective for linear classification problems, may struggle with the nuanced and multi-dimensional nature of language. It tends to view data through a linear lens, which can be limiting when dealing with the complexities of natural language, where context and subtleties play a significant role.
+Logistic Regression, although effective for linear classification problems,
+may struggle with the nuanced and multi-dimensional nature of language.
+It tends to view data through a linear lens, which can be limiting when dealing
+with the complexities of natural language, where context and subtleties play a significant role.
 
-Another potential issue is overfitting, especially if the training data isn't diverse enough. If the model is too closely fitted to the training data, it may not perform well on new, unseen texts. This is particularly true for language models where the diversity of expression, syntax, and vocabulary can vary greatly.
+Another potential issue is overfitting, especially if the training data isn't diverse enough.
+If the model is too closely fitted to the training data, it may not perform well on new,
+unseen texts. This is particularly true for language models where the diversity of expression,
+syntax, and vocabulary can vary greatly.
 
-Additionally, the accuracy might be affected by the way labels are encoded and the balance of the dataset. If the dataset is biased towards certain difficulty levels, it could bias the model's predictions.
+Additionally, the accuracy might be affected by the way labels are encoded and the balance of
+the dataset. If the dataset is biased towards certain difficulty levels,
+it could bias the model's predictions.
