@@ -37,7 +37,7 @@ if precision == '25%':
 elif precision == '40%':
     st.write("None")
 elif precision == '50%':
-    st.write("Méthode TF-IF (49% de précision)")
+    st.write("Logistic regression (45% Accurancy)")
 elif precision == '55%':
     st.write("None")
 elif precision == '65%':
@@ -50,8 +50,8 @@ st.write("")
 user_input = st.text_input("Entrez le nom de la méthode pour obtenir des détails :", "")
 
 # Vérification de la saisie de l'utilisateur et affichage de la réponse
-if user_input.lower() == 'méthode tf-if':
-    texte1 = "Tout le code nécessaire pour run la méthode TF-IF"
+if user_input.lower() == 'Logistic regression':
+    texte1 = "Tout le code nécessaire pour run la Logistic Regression"
     st.write(texte1)
 
     # Bouton pour copier le texte
