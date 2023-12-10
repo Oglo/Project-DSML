@@ -1,10 +1,20 @@
 import streamlit as st
+import requests
 import pickle
+from io import BytesIO
 
-# Charger le modèle
-with open('mon_modele_langue.pkl', 'rb') as file:
-    modele_charge = pickle.load(file)
+# URL du modèle sur GitHub
+url_modele = 'https://github.com/Oglo/Projec-DSML/raw/main/Streamlit/mon_modele_langue.pkl'
 
+# Fonction pour télécharger et charger le modèle
+def charger_modele(url):
+    response = requests.get(url)
+    modele = BytesIO(response.content)
+    return pickle.load(modele)
+
+modele_charge = charger_modele(url_modele)
+
+# Fonction pour faire des prédictions
 def predire_niveau(texte):
     return modele_charge.predict([texte])[0]
 
