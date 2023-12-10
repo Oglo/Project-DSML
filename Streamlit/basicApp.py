@@ -1,38 +1,24 @@
 import streamlit as st
 import requests
-import joblib
-from io import BytesIO
+import pickle
+from sklearn.pipeline import Pipeline
 
-# URL du modèle sur GitHub
-url_modele = 'https://github.com/Oglo/Project-DSML/raw/main/Streamlit/mon_modele_langue.joblib'
-
-# Fonction pour télécharger et charger le modèle
-def charger_modele(url):
+# Télécharger le modèle depuis GitHub
+@st.cache
+def load_model(url):
     response = requests.get(url)
-    if response.status_code == 200:
-        modele = BytesIO(response.content)
-        return joblib.load(modele)
-    else:
-        st.error(f"Échec du téléchargement du modèle : statut {response.status_code}")
-        return None
+    model = pickle.loads(response.content)
+    return model
 
-# Télécharge et charge le modèle
-modele_charge = charger_modele(url_modele)
+# Remplacer par l'URL de votre modèle sur GitHub
+model_url = 'https://github.com/Oglo/Projec-DSML/raw/main/Streamlit/language_level_model.pkl'
+model = load_model(model_url)
 
-# Vérifie si le modèle a été chargé avec succès
-if modele_charge is not None:
+# Création de l'interface utilisateur
+st.title('Prédiction du niveau de langue d’un texte en français')
 
-    # Fonction pour faire des prédictions
-    def predire_niveau(texte):
-        return modele_charge.predict([texte])[0]
+text = st.text_area("Entrez votre texte ici:", "")
 
-    # Interface Streamlit
-    st.title('Prédicteur de niveau de langue française')
-
-    texte_utilisateur = st.text_area("Entrez votre texte ici:")
-
-    if st.button('Prédire'):
-        niveau_predi = predire_niveau(texte_utilisateur)
-        st.write(f'Le niveau de langue prédit est : {niveau_predi}')
-else:
-    st.error("Le modèle n'a pas pu être chargé. Veuillez vérifier l'URL du modèle.")
+if st.button('Prédire le niveau de langue'):
+    prediction = model.predict([text])[0]
+    st.write(f'Le niveau de langue prédit pour ce texte est : {prediction}')
