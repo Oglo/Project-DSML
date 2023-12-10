@@ -13,7 +13,7 @@ def load_model(url):
         model = pickle.load(open(tmp.name, 'rb'))
     return model
 
-model_url = 'https://github.com/Oglo/Project-DSML/raw/main/Streamlit/language_level_model2.pkl'
+model_url = 'https://raw.githubusercontent.com/Oglo/Project-DSML/main/Streamlit/language_level_model2.pkl'
 model = load_model(model_url)
 
 # Interface utilisateur Streamlit
