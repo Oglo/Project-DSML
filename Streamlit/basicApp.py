@@ -1,8 +1,7 @@
 import streamlit as st
 import requests
-from PIL import Image  # Importer PIL pour ouvrir des images
-from io import BytesIO  # Importer BytesIO (corrigez 'import BytesIO')
-
+from PIL import Image
+from io import BytesIO
 
 # URL de l'image sur GitHub en mode raw
 logo_url = "https://raw.githubusercontent.com/Oglo/Project-DSML/main/Code/images/logomigros.png"
@@ -49,15 +48,7 @@ st.write("")
 # Création d'un champ de saisie de texte pour que l'utilisateur puisse entrer le nom d'une méthode
 user_input = st.text_input("Entrez le nom de la méthode pour obtenir des détails :", "")
 
-# Vérification de la saisie de l'utilisateur et affichage de la réponse
+# Vérification de la saisie de l'utilisateur et redirection vers une URL
 if user_input.lower() == 'logistic regression':
-    texte1 = "Tout le code nécessaire pour run la Logistic Regression"
-    st.write(texte1)
-
-    # Bouton pour copier le texte
-    st.markdown(f"""
-        <textarea id="text_to_copy" style="display: none;">{texte1}</textarea>
-        <button onclick="navigator.clipboard.writeText(document.getElementById('text_to_copy').value)">
-            Copier le texte
-        </button>
-    """, unsafe_allow_html=True)
+    url = "https://github.com/Oglo/Project-DSML/blob/main/Code/Methods/1_LogisticRegression.ipynb"  # Remplacez ceci par l'URL de votre choix
+    st.markdown(f"[Cliquez ici pour en savoir plus sur la régression logistique]({url})", unsafe_allow_html=True)
