@@ -1,7 +1,8 @@
-import Streamlit
+import streamlit as st
 import requests
-import joblib
+from PIL import Image
 from io import BytesIO
+import joblib
 
 # URL de l'image sur GitHub en mode raw
 logo_url = "https://raw.githubusercontent.com/Oglo/Project-DSML/main/Code/images/logomigros.png"
@@ -15,18 +16,14 @@ col1, col2, col3 = st.columns([1, 2, 1])
 
 with col2:  # Utilisation de la colonne centrale
     # Affichage du titre 'Team' centré
-    st.markdown("<h1 style='text-align: center'>Team</h1>", unsafe_allow_html=True)
-
-    
+    st.markdown("<h1 style='text-align: center'>Team</h1>", unsafe_allow_html=True)    
     st.image(logo_img)
 
 for _ in range(5):  
     st.write("")
 
-# Affichage du texte 'Hello World2'
-st.write('Welcome to the Migros Team streamlit application!With this platform, you will be able to choose the precision you want in predicting the language level of your text.')
-
-# ... [le reste de votre code existant]
+# Affichage du texte d'accueil
+st.write('Welcome to the Migros Team streamlit application! With this platform, you will be able to choose the precision you want in predicting the language level of your text.')
 
 # Espacement
 st.write("")
@@ -46,8 +43,6 @@ elif precision == '55%':
 elif precision == '65%':
     st.write("None")
 
-
-
 # Espacement
 st.write("")
 
@@ -59,6 +54,7 @@ if user_input.lower() == 'méthode tf-if':
     texte1 = "Tout le code nécessaire pour run la méthode TF-IF"
     st.write(texte1)
 
+    # Bouton pour copier le texte
     st.markdown(f"""
         <textarea id="text_to_copy" style="display: none;">{texte1}</textarea>
         <button onclick="navigator.clipboard.writeText(document.getElementById('text_to_copy').value)">
@@ -66,19 +62,7 @@ if user_input.lower() == 'méthode tf-if':
         </button>
     """, unsafe_allow_html=True)
 
-# Vous pouvez ajouter d'autres conditions pour d'autres méthodes si nécessaire
-user_text = st.text_area("Entrez votre texte ici :", "")
-
-# Bouton pour prédire le niveau de langue
-if st.button("Prédire le niveau de langue"):
-    if user_text:  # Vérifier si l'utilisateur a entré un texte
-        prediction = model.predict([user_text])
-        predicted_level = label_encoder.inverse_transform(prediction)
-        st.write(f"Niveau de langue prédit : {predicted_level[0]}")
-    else:
-        st.write("Veuillez entrer un texte.")
-
-        # Téléchargement du modèle depuis GitHub
+# Téléchargement du modèle depuis GitHub
 model_url = "https://github.com/Oglo/Project-DSML/raw/main/Streamlit/model_langue.pkl"
 response = requests.get(model_url)
 model_file = BytesIO(response.content)
