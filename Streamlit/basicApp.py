@@ -50,7 +50,7 @@ st.write("")
 user_input = st.text_input("Entrez le nom de la méthode pour obtenir des détails :", "")
 
 # Vérification de la saisie de l'utilisateur et affichage de la réponse
-if user_input.lower() == 'Logistic regression':
+if user_input.lower() == 'logistic regression':
     texte1 = "Tout le code nécessaire pour run la Logistic Regression"
     st.write(texte1)
 
