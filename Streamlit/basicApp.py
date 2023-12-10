@@ -1,34 +1,37 @@
 import streamlit as st
 import requests
-import pickle
+from joblib import load
 import tempfile
-import os
 
-# Télécharger le modèle depuis GitHub et le charger
-@st.cache(allow_output_mutation=True)
-def load_model(url):
-    response = requests.get(url, stream=True)
-    if response.status_code != 200:
+# Fonction pour télécharger le modèle depuis GitHub
+def download_model(url):
+    r = requests.get(url, allow_redirects=True)
+    if r.status_code == 200:
+        f = tempfile.NamedTemporaryFile(delete=False, suffix='.joblib')
+        f.write(r.content)
+        f.close()
+        return f.name
+    else:
         return None
-    with tempfile.NamedTemporaryFile(delete=False, suffix='.pkl') as tmp:
-        for chunk in response.iter_content(chunk_size=8192):
-            tmp.write(chunk)
-        tmp.flush()
-        with open(tmp.name, 'rb') as f:
-            model = pickle.load(f)
-    os.remove(tmp.name)  # Supprimer le fichier temporaire
-    return model
 
-model_url = 'https://github.com/Oglo/Project-DSML/raw/main/Streamlit/language_level_model2.pkl'
-model = load_model(model_url)
+# URL du modèle sur GitHub
+model_url = 'https://github.com/Oglo/Project-DSML/raw/main/Streamlit/language_level_classifier.joblib'
 
-if not model:
-    st.error("Erreur lors du chargement du modèle. Veuillez vérifier l'URL ou réessayer plus tard.")
+# Télécharger le modèle
+model_path = download_model(model_url)
+if model_path:
+    model = load(model_path)
 else:
-    # Interface utilisateur Streamlit
-    st.title('Prédiction du niveau de langue d’un texte en français')
-    text = st.text_area("Entrez votre texte ici:", "")
+    st.error("Erreur lors du téléchargement du modèle")
+    st.stop()
 
-    if st.button('Prédire le niveau de langue'):
+# Interface Streamlit
+st.title("Prédiction du Niveau de Langue Française")
+text = st.text_area("Entrez votre texte ici:")
+
+if st.button('Prédire'):
+    if text:
         prediction = model.predict([text])[0]
-        st.write(f'Le niveau de langue prédit pour ce texte est : {prediction}')
+        st.success(f"Le niveau de langue prédit est: {prediction}")
+    else:
+        st.error("Veuillez entrer un texte.")
