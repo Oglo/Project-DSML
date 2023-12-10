@@ -1,22 +1,23 @@
-
 import streamlit as st
 import requests
 import pickle
+import tempfile
 
-# Télécharger le modèle depuis GitHub
+# Télécharger le modèle depuis GitHub et le charger
 @st.cache
 def load_model(url):
     response = requests.get(url)
-    model = pickle.loads(response.content)
+    with tempfile.NamedTemporaryFile(suffix='.pkl') as tmp:
+        tmp.write(response.content)
+        tmp.flush()
+        model = pickle.load(open(tmp.name, 'rb'))
     return model
 
-# Remplacer par l'URL de votre modèle sur GitHub
-model_url = 'https://github.com/Oglo/Projec-DSML/raw/main/Streamlit/language_level_model2.pkl'
+model_url = 'https://github.com/Oglo/Project-DSML/raw/main/Streamlit/language_level_model2.pkl'
 model = load_model(model_url)
 
-# Création de l'interface utilisateur
+# Interface utilisateur Streamlit
 st.title('Prédiction du niveau de langue d’un texte en français')
-
 text = st.text_area("Entrez votre texte ici:", "")
 
 if st.button('Prédire le niveau de langue'):
