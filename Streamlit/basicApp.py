@@ -2,6 +2,16 @@ import streamlit as st
 import requests
 from PIL import Image
 from io import BytesIO
+import joblib
+
+# Charger le modèle et l'encodeur
+@st.cache
+def load_model():
+    model = joblib.load('model_langue.pkl')
+    label_encoder = joblib.load('label_encoder.pkl')
+    return model, label_encoder
+
+model, label_encoder = load_model()
 
 # URL de l'image sur GitHub en mode raw
 logo_url = "https://raw.githubusercontent.com/Oglo/Project-DSML/main/Code/images/logomigros.png"
@@ -67,3 +77,13 @@ if user_input.lower() == 'méthode tf-if':
     """, unsafe_allow_html=True)
 
 # Vous pouvez ajouter d'autres conditions pour d'autres méthodes si nécessaire
+user_text = st.text_area("Entrez votre texte ici :", "")
+
+# Bouton pour prédire le niveau de langue
+if st.button("Prédire le niveau de langue"):
+    if user_text:  # Vérifier si l'utilisateur a entré un texte
+        prediction = model.predict([user_text])
+        predicted_level = label_encoder.inverse_transform(prediction)
+        st.write(f"Niveau de langue prédit : {predicted_level[0]}")
+    else:
+        st.write("Veuillez entrer un texte.")
