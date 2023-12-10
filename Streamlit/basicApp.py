@@ -1,7 +1,7 @@
+
 import streamlit as st
 import requests
 import pickle
-from sklearn.pipeline import Pipeline
 
 # Télécharger le modèle depuis GitHub
 @st.cache
@@ -11,7 +11,7 @@ def load_model(url):
     return model
 
 # Remplacer par l'URL de votre modèle sur GitHub
-model_url = 'https://github.com/Oglo/Projec-DSML/raw/main/Streamlit/language_level_model.pkl'
+model_url = 'https://github.com/Oglo/Projec-DSML/raw/main/Streamlit/language_level_model2.pkl'
 model = load_model(model_url)
 
 # Création de l'interface utilisateur
