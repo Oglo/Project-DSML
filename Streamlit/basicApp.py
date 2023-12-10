@@ -3,8 +3,8 @@ import joblib
 from io import BytesIO
 
 # URL du modèle sur GitHub
-model_url = "https://github.com/votre_utilisateur/votre_repo/raw/chemin_vers_le_modele/model_langue.pkl"
-label_encoder_url = "https://github.com/votre_utilisateur/votre_repo/raw/chemin_vers_le_modele/label_encoder.pkl"
+model_url = "https://github.com/Oglo/Project-DSML/raw/main/Streamlit/model_langue.pkl"
+label_encoder_url = "https://github.com/Oglo/Project-DSML/raw/main/Streamlit/label_encoder.pkl"
 
 def load_model_from_github(url):
     response = requests.get(url)
