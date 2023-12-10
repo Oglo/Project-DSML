@@ -1,17 +1,17 @@
-import streamlit as st
 import requests
-from PIL import Image
-from io import BytesIO
 import joblib
+from io import BytesIO
 
-# Charger le modèle et l'encodeur
-@st.cache
-def load_model():
-    model = joblib.load('model_langue.pkl')
-    label_encoder = joblib.load('label_encoder.pkl')
-    return model, label_encoder
+# URL du modèle sur GitHub
+model_url = "https://github.com/votre_utilisateur/votre_repo/raw/chemin_vers_le_modele/model_langue.pkl"
+label_encoder_url = "https://github.com/votre_utilisateur/votre_repo/raw/chemin_vers_le_modele/label_encoder.pkl"
 
-model, label_encoder = load_model()
+def load_model_from_github(url):
+    response = requests.get(url)
+    model = joblib.load(BytesIO(response.content))
+    return model
+
+
 
 # URL de l'image sur GitHub en mode raw
 logo_url = "https://raw.githubusercontent.com/Oglo/Project-DSML/main/Code/images/logomigros.png"
