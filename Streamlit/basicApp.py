@@ -37,6 +37,7 @@ elif precision == '40%':
     st.write("None")
 elif precision == '50%':
     st.write("Logistic regression (45% Accurancy)")
+    st.write("Logistic regression 2 (45% Accurancy)")
 elif precision == '55%':
     st.write("None")
 elif precision == '65%':
