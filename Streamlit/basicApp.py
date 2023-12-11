@@ -32,14 +32,16 @@ with col2:  # Utilisation de la colonne centrale
 
 # Sélection du pourcentage de précision
 precision = st.selectbox('Choisissez le pourcentage de précision :', 
-                         ['30%', '40%', '50%', '55%', '60%'])
+                         ['30%', '40%', '45%', '55%', '60%'])
 
 # Afficher les modèles en fonction de la précision choisie
 # Cela dépend de la manière dont vous associez les pourcentages aux modèles
 if precision == '30%':
     models = ['Random Forest (36%)', 'Modèle B']  # Exemple
 elif precision == '40%':
-    models = ['Logistic Regression (45%)', 'Modèle D']  # Exemple
+    models = ['Logistic Regression (45%)', 'Model 3']
+elif precision == '45%' :
+    models = ['Support Vector Machine (41,5%)']  # Exemple
 # Ajoutez d'autres conditions pour les autres pourcentages
 
 model_choice = st.selectbox('Choisissez un modèle :', models)
