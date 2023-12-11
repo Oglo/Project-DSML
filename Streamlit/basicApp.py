@@ -37,7 +37,7 @@ precision = st.selectbox('Choisissez le pourcentage de précision :',
 # Afficher les modèles en fonction de la précision choisie
 # Cela dépend de la manière dont vous associez les pourcentages aux modèles
 if precision == '30%':
-    models = ['Model A', 'Modèle B']  # Exemple
+    models = ['Random Forest (36%)', 'Modèle B']  # Exemple
 elif precision == '40%':
     models = ['Logistic Regression (45%)', 'Modèle D']  # Exemple
 # Ajoutez d'autres conditions pour les autres pourcentages
@@ -52,4 +52,10 @@ if st.button('Prédire le niveau de langue'):
     model_url = f"https://github.com/Oglo/Project-DSML/raw/main/Streamlit/{model_choice}.joblib"
     model = load_model(model_url)
     prediction = model.predict([user_input])
-    st.write(f'Niveau de langue prédit: {prediction[0]}')
+
+    # Dictionnaire pour mapper les chiffres aux niveaux de langue
+    niveau_langue = {0: 'A1', 1: 'A2', 2: 'B1', 3: 'B2', 4: 'C1', 5: 'C2'}
+
+    # Affichage du niveau de langue correspondant
+    predicted_level = niveau_langue[prediction[0]]
+    st.write(f'Niveau de langue prédit: {predicted_level}')
