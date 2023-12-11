@@ -40,7 +40,7 @@ elif precision == '50%':
 elif precision == '55%':
     st.write("None")
 elif precision == '65%':
-    st.write("None")
+    st.write("oui")
 
 # Espacement
 st.write("")
