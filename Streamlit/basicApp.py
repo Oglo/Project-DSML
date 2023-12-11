@@ -1,34 +1,39 @@
-
 import streamlit as st
 import requests
-import pickle
-from io import BytesIO
+from joblib import load
+import joblib
+import sklearn
+import tempfile
 
-# Fonction pour charger le modèle et l'encodeur depuis GitHub
-def load_model_from_github(url):
-    response = requests.get(url)
-    model_file = BytesIO(response.content)
-    return pickle.load(model_file)
+# Fonction pour télécharger le modèle depuis GitHub
+def download_model(url):
+    r = requests.get(url, allow_redirects=True)
+    if r.status_code == 200:
+        f = tempfile.NamedTemporaryFile(delete=False, suffix='.joblib')
+        f.write(r.content)
+        f.close()
+        return f.name
+    else:
+        return None
 
-# Liens GitHub
-model_url = 'https://raw.githubusercontent.com/Oglo/Project_DSML/main/Streamlit/model_pipeline.pkl'
-label_encoder_url = 'https://raw.githubusercontent.com/Oglo/Project_DSML/main/Streamlit/label_encoder (1).pkl'
+# URL du modèle sur GitHub
+model_url = 'https://github.com/Oglo/Project-DSML/raw/main/Streamlit/language_level_classifier.joblib'
 
-# Charger le modèle et l'encodeur
-model = load_model_from_github(model_url)
-label_encoder = load_model_from_github(label_encoder_url)
+# Télécharger le modèle
+model_path = download_model(model_url)
+if model_path:
+    model = joblib.load(model_path)
+else:
+    st.error("Erreur lors du téléchargement du modèle")
+    st.stop()
 
 # Interface Streamlit
-st.title("Prédiction du niveau de langue")
-
-# Zone de texte pour l'entrée de l'utilisateur
-user_input = st.text_area("Entrez votre texte ici:")
+st.title("Prédiction du Niveau de Langue Française")
+text = st.text_area("Entrez votre texte ici:")
 
 if st.button('Prédire'):
-    # Prédiction
-    prediction = model.predict([user_input])
-    prediction_label = label_encoder.inverse_transform(prediction)
-    
-    # Afficher la prédiction
-    st.write(f"Niveau de langue prédit : {prediction_label[0]}")
-
+    if text:
+        prediction = model.predict([text])[0]
+        st.success(f"Le niveau de langue prédit est: {prediction}")
+    else:
+        st.error("Veuillez entrer un texte.")
