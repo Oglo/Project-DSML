@@ -2,6 +2,8 @@ import streamlit as st
 import requests
 from PIL import Image
 from io import BytesIO
+import gdown
+
 
 # URL de l'image sur GitHub en mode raw
 logo_url = "https://raw.githubusercontent.com/Oglo/Project-DSML/main/Code/images/logomigros.png"
@@ -28,7 +30,7 @@ st.write('Welcome to the Migros Team streamlit application! With this platform, 
 st.write("")
 
 # Création des boutons pour choisir le taux de précision
-precision = st.radio("Choisissez le taux de précision :", ('30%', '40%', '45%', '50%', '55%'))
+precision = st.radio("Choisissez le taux de précision :", ('30%', '40%', '50%', '55%', '60%'))
 
 # Affichage de la méthode en fonction du taux de précision sélectionné
 if precision == '30%':
@@ -39,7 +41,7 @@ elif precision == '50%':
     st.write("Logistic regression (45% Accurancy)")
 elif precision == '55%':
     st.write("None")
-elif precision == '65%':
+elif precision == '60%':
     st.write("oui")
 
 # Espacement
