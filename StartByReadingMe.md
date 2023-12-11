@@ -1,4 +1,5 @@
- Project-DSML -  TEAM <img src="https://raw.githubusercontent.com/Oglo/Project-DSML/main/Code/images/logomigros.png" alt="Email Logo" width="40" height="40">
+<h1>Project-DSML - TEAM <span style="color: orange;">MIGROS</span></h1>
+
 
 
 Hello everyone, we're Antoine Oglobleff and Manuel Solazzo and we're the Migros team for this Project.
