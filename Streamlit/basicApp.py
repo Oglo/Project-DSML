@@ -2,7 +2,7 @@ import streamlit as st
 import requests
 from PIL import Image
 from io import BytesIO
-import gdown
+
 
 
 # URL de l'image sur GitHub en mode raw
