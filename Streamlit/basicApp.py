@@ -28,16 +28,15 @@ st.write('Welcome to the Migros Team streamlit application! With this platform, 
 st.write("")
 
 # Création des boutons pour choisir le taux de précision
-precision = st.radio("Choisissez le taux de précision :", ('25%', '40%', '50%', '55%', '65%'))
+precision = st.radio("Choisissez le taux de précision :", ('30%', '40%', '45%', '50%', '55%'))
 
 # Affichage de la méthode en fonction du taux de précision sélectionné
-if precision == '25%':
-    st.write("None")
+if precision == '30%':
+    st.write("Random Forest (36% Accurancy)")
 elif precision == '40%':
     st.write("None")
 elif precision == '50%':
     st.write("Logistic regression (45% Accurancy)")
-    st.write("Logistic regression 2 (45% Accurancy)")
 elif precision == '55%':
     st.write("None")
 elif precision == '65%':
@@ -52,4 +51,8 @@ user_input = st.text_input("Entrez le nom de la méthode pour obtenir des détai
 # Vérification de la saisie de l'utilisateur et redirection vers une URL
 if user_input.lower() == 'logistic regression':
     url = "https://github.com/Oglo/Project-DSML/blob/main/Code/Methods/1_LogisticRegression.ipynb"  # Remplacez ceci par l'URL de votre choix
-    st.markdown(f"[Cliquez ici pour en savoir plus sur la régression logistique]({url})", unsafe_allow_html=True)
+    st.markdown(f"[Click here to use Logistic Regression Model]({url})", unsafe_allow_html=True)
+if user_input.lower() == 'random forest':
+    url = "https://github.com/Oglo/Project-DSML/blob/main/Code/Methods/2_RandomForestClassifier.ipynb"  # Remplacez ceci par l'URL de votre choix
+    st.markdown(f"[Click here to use Random Forest Model]({url})", unsafe_allow_html=True)
+
