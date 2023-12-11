@@ -1,21 +1,34 @@
+
 import streamlit as st
-import joblib
+import requests
+import pickle
+from io import BytesIO
 
-# Charger le modèle
-modele = joblib.load('"C:\\Users\\antoi\\OneDrive\\Bureau\\mon_modele_entraine.pkl"') # Remplacez avec le chemin correct
+# Fonction pour charger le modèle et l'encodeur depuis GitHub
+def load_model_from_github(url):
+    response = requests.get(url)
+    model_file = BytesIO(response.content)
+    return pickle.load(model_file)
 
-def predire_niveau(texte):
-    # Cette fonction devra être adaptée selon la façon dont votre modèle fonctionne
-    prediction = modele.predict([texte])
-    return prediction[0]
+# Liens GitHub
+model_url = 'https://raw.githubusercontent.com/Oglo/Project_DSML/main/Streamlit/model_pipeline.pkl'
+label_encoder_url = 'https://raw.githubusercontent.com/Oglo/Project_DSML/main/Streamlit/label_encoder (1).pkl'
 
-# Créer l'interface Streamlit
-st.title('Prédiction du niveau de langue')
+# Charger le modèle et l'encodeur
+model = load_model_from_github(model_url)
+label_encoder = load_model_from_github(label_encoder_url)
+
+# Interface Streamlit
+st.title("Prédiction du niveau de langue")
 
 # Zone de texte pour l'entrée de l'utilisateur
-texte_utilisateur = st.text_area("Entrez votre texte ici:")
+user_input = st.text_area("Entrez votre texte ici:")
 
-# Bouton de prédiction
 if st.button('Prédire'):
-    niveau_langue = predire_niveau(texte_utilisateur)
-    st.write(f'Le niveau de langue prédit est : {niveau_langue}')
+    # Prédiction
+    prediction = model.predict([user_input])
+    prediction_label = label_encoder.inverse_transform(prediction)
+    
+    # Afficher la prédiction
+    st.write(f"Niveau de langue prédit : {prediction_label[0]}")
+
