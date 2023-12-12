@@ -50,7 +50,7 @@ model_choice = st.selectbox('Choisissez un modèle :', models)
 user_input = st.text_area("Entrez votre texte ici:")
 
 # Chargement et prédiction du modèle
-if st.button('Prédire le niveau de langue'):
+if st.button(f'Prédire le niveau de langue avec {model_choice}'):
     model_url = f"https://github.com/Oglo/Project-DSML/raw/main/Streamlit/{model_choice}.joblib"
     model = load_model(model_url)
     prediction = model.predict([user_input])
