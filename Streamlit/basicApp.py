@@ -1,12 +1,12 @@
 import streamlit as st
-import requests
 from joblib import load
 import joblib
-import sklearn
 import tempfile
 import requests
 from io import BytesIO
 from PIL import Image
+import sklearn
+
 
 
 # Fonction pour charger le modèle depuis GitHub
