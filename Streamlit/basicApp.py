@@ -7,7 +7,10 @@ from io import BytesIO
 from PIL import Image
 import sklearn
 
-
+def load_vectorizer(url):
+    response = requests.get(url)
+    vectorizer = joblib.load(BytesIO(response.content))
+    return vectorizer
 
 # Fonction pour charger le modèle depuis GitHub
 def load_model(url):
@@ -47,13 +50,23 @@ elif precision == '40%' :
 model_choice = st.selectbox('Choisissez un modèle :', models)
 
 # Zone de texte pour la saisie de la phrase
+
 user_input = st.text_area("Entrez votre texte ici:")
+
+# Chargement du vectoriseur
+vectorizer_url = f"https://github.com/Oglo/Project-DSML/raw/main/Streamlit/vectorizer.joblib"
+vectorizer = load_vectorizer(vectorizer_url)
 
 # Chargement et prédiction du modèle
 if st.button(f'Prédire le niveau de langue avec {model_choice}'):
     model_url = f"https://github.com/Oglo/Project-DSML/raw/main/Streamlit/{model_choice}.joblib"
     model = load_model(model_url)
-    prediction = model.predict([user_input])
+
+    # Transformer l'entrée utilisateur
+    user_input_transformed = vectorizer.transform([user_input])
+
+    # Faire la prédiction
+    prediction = model.predict(user_input_transformed)
 
     # Dictionnaire pour mapper les chiffres aux niveaux de langue
     niveau_langue = {0: 'A1', 1: 'A2', 2: 'B1', 3: 'B2', 4: 'C1', 5: 'C2'}
