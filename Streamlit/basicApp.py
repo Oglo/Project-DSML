@@ -39,7 +39,7 @@ precision = st.selectbox('Choisissez le pourcentage de précision :',
 if precision == '30%':
     models = ['Random Forest (36%)', 'Modèle B']  # Exemple
 elif precision == '45%':
-    models = ['Logistic Regression (45%)', 'Model 3']
+    models = ['Logistic Regression (45%)', 'Model ']
 elif precision == '40%' :
     models = ['Support Vector Machine (41,5%)']  # Exemple
 # Ajoutez d'autres conditions pour les autres pourcentages
