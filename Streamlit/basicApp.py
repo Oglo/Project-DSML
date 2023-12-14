@@ -37,7 +37,7 @@ precision = st.selectbox('Choisissez le pourcentage de précision :',
 # Afficher les modèles en fonction de la précision choisie
 # Cela dépend de la manière dont vous associez les pourcentages aux modèles
 if precision == '30%':
-    models = ['Random Forest (36%)', 'Modèle B']  # Exemple
+    models = ['Random Forest (36%)', 'Spacy']  # Exemple
 elif precision == '45%':
     models = ['Logistic Regression (45%)', 'Model ']
 elif precision == '40%' :
