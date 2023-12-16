@@ -7,6 +7,9 @@ import spacy
 import pandas as pd
 import joblib
 
+ # Dictionnaire pour mapper les chiffres aux niveaux de langue
+niveau_langue = {0: 'A1', 1: 'A2', 2: 'B1', 3: 'B2', 4: 'C1', 5: 'C2'}
+
 # Fonction pour charger le modèle depuis GitHub
 def load_model(url):
     response = requests.get(url)
@@ -57,10 +60,11 @@ precision = st.selectbox('Choisissez le pourcentage de précision :', ['30%', '4
 model_choice = None
 if precision == '30%':
     models = ['Random Forest (36%)', 'Spacy (32%)']
-elif precision == '45%':
-    models = ['Logistic Regression (45%)', 'RNN']
 elif precision == '40%':
     models = ['Vector']
+elif precision == '45%':
+    models = ['Logistic Regression (45%)', 'RNN']
+
 # Ajoutez d'autres conditions pour les autres pourcentages
 
 model_choice = st.selectbox('Choisissez un modèle :', models)
@@ -74,21 +78,21 @@ if st.button(f'Prédire le niveau de langue avec {model_choice}'):
         model_url = f"https://github.com/Oglo/Project-DSML/raw/main/Streamlit/{model_choice}.joblib"
         model = load_model(model_url)
         prediction = predict1(model, user_input)
+        predicted_index = int(prediction[0])
+        predicted_level = niveau_langue[predicted_index]
     elif 'Vector' in model_choice:
         model_url = f"https://github.com/Oglo/Project-DSML/raw/main/Streamlit/{model_choice}.joblib"
         vectorizer_url = f"https://github.com/Oglo/Project-DSML/raw/main/Streamlit/vectorizer.joblib"  # Assurez-vous que cette URL est correcte
         model = load_model(model_url)
         vectorizer = joblib.load(BytesIO(requests.get(vectorizer_url).content))
         prediction = predict2(model, vectorizer, user_input)
+        predicted_level = prediction[0]
     elif 'Spacy (32%)' in model_choice:
         model_url = f"https://github.com/Oglo/Project-DSML/raw/main/Streamlit/{model_choice}.joblib"
         model = load_model(model_url)
         prediction = predict1(model, user_input)
-    # Ajoutez d'autres conditions pour les autres modèles si nécessaire
+        predicted_index = int(prediction[0])
+        predicted_level = niveau_langue[predicted_index]
+    
 
-    # Dictionnaire pour mapper les chiffres aux niveaux de langue
-    niveau_langue = {0: 'A1', 1: 'A2', 2: 'B1', 3: 'B2', 4: 'C1', 5: 'C2'}
-
-    # Affichage du niveau de langue correspondant
-    predicted_level = niveau_langue[prediction[0]]
     st.write(f'Niveau de langue prédit: {predicted_level}')
