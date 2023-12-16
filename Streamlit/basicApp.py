@@ -68,7 +68,7 @@ def predict2(model, vectorizer, text):
 
 # Interface Streamlit
 logo_url = "https://raw.githubusercontent.com/Oglo/Project-DSML/main/Code/images/logomigros.png"
-
+image_yt = "https://raw.githubusercontent.com/Oglo/Project-DSML/main/Code/images/logoyt.png"
 # Télécharger l'image depuis l'URL
 response = requests.get(logo_url)
 logo_img = Image.open(BytesIO(response.content))
@@ -142,6 +142,7 @@ if st.button(f'Prédire le niveau de langue avec {model_choice}'):
 youtube_url = st.text_input("Collez l'URL de la vidéo YouTube ici :")
 
 # Bouton pour déclencher le téléchargement et la prédiction
+st.image(image_yt, caption="Description de l'image")
 if st.button("Extraire et prédire le niveau de langue"):
     try:
         subtitles = download_youtube_subtitles(youtube_url)
