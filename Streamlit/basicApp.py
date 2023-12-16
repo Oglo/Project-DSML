@@ -6,6 +6,7 @@ from PIL import Image
 import spacy
 import pandas as pd
 import joblib
+import youtube_dl
 #import tensorflow
 
 # Dictionnaire pour mapper les chiffres aux niveaux de langue
@@ -110,3 +111,7 @@ if st.button(f'Prédire le niveau de langue avec {model_choice}'):
     
 
     st.write(f'Niveau de langue prédit: {predicted_level}')
+
+# Importations supplémentaires
+
+
