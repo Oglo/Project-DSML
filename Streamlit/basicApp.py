@@ -80,6 +80,10 @@ if st.button(f'Prédire le niveau de langue avec {model_choice}'):
         model = load_model(model_url)
         vectorizer = joblib.load(BytesIO(requests.get(vectorizer_url).content))
         prediction = predict_with_svc(model, vectorizer, user_input)
+    elif 'Spacy (32%)' in model_choice:
+        model_url = f"https://github.com/Oglo/Project-DSML/raw/main/Streamlit/{model_choice}.joblib"
+        model = load_model(model_url)
+        prediction = predict_with_logistic_regression(model, user_input)
     # Ajoutez d'autres conditions pour les autres modèles si nécessaire
 
     # Dictionnaire pour mapper les chiffres aux niveaux de langue
