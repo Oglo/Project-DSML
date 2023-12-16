@@ -24,14 +24,14 @@ def extract_features(text):
     return [avg_sentence_length, lexical_diversity]
 
 # Fonction pour prédire avec Logistic Regression
-def predict_with_logistic_regression(model, text):
+def predict1(model, text):
     features = extract_features(text)
     features_df = pd.DataFrame([features], columns=['avg_sentence_length', 'lexical_diversity'])
     prediction = model.predict(features_df)
     return prediction
 
 # Fonction pour prédire avec SVC
-def predict_with_svc(model, vectorizer, text):
+def predict2(model, vectorizer, text):
     processed_text = vectorizer.transform([text])
     prediction = model.predict(processed_text)
     return prediction
@@ -73,17 +73,17 @@ if st.button(f'Prédire le niveau de langue avec {model_choice}'):
     if 'Logistic Regression (45%)' in model_choice:
         model_url = f"https://github.com/Oglo/Project-DSML/raw/main/Streamlit/{model_choice}.joblib"
         model = load_model(model_url)
-        prediction = predict_with_logistic_regression(model, user_input)
+        prediction = predict1(model, user_input)
     elif 'Vector' in model_choice:
         model_url = f"https://github.com/Oglo/Project-DSML/raw/main/Streamlit/{model_choice}.joblib"
         vectorizer_url = f"https://github.com/Oglo/Project-DSML/raw/main/Streamlit/vectorizer.joblib"  # Assurez-vous que cette URL est correcte
         model = load_model(model_url)
         vectorizer = joblib.load(BytesIO(requests.get(vectorizer_url).content))
-        prediction = predict_with_svc(model, vectorizer, user_input)
+        prediction = predict2(model, vectorizer, user_input)
     elif 'Spacy (32%)' in model_choice:
         model_url = f"https://github.com/Oglo/Project-DSML/raw/main/Streamlit/{model_choice}.joblib"
         model = load_model(model_url)
-        prediction = predict_with_logistic_regression(model, user_input)
+        prediction = predict1(model, user_input)
     # Ajoutez d'autres conditions pour les autres modèles si nécessaire
 
     # Dictionnaire pour mapper les chiffres aux niveaux de langue
