@@ -68,10 +68,12 @@ def predict2(model, vectorizer, text):
 
 # Interface Streamlit
 logo_url = "https://raw.githubusercontent.com/Oglo/Project-DSML/main/Code/images/logomigros.png"
-image_yt = "https://raw.githubusercontent.com/Oglo/Project-DSML/main/Code/images/logoyt.png"
+logo_yt = "https://raw.githubusercontent.com/Oglo/Project-DSML/main/Code/images/logoyt.png"
 # Télécharger l'image depuis l'URL
 response = requests.get(logo_url)
 logo_img = Image.open(BytesIO(response.content))
+response2 = requests.get(logo_yt)
+image_yt = Image.open(BytesIO(response2.content))
 
 # Création d'une structure de colonnes pour aligner le titre et l'image
 col1, col2, col3 = st.columns([1, 2, 1])
