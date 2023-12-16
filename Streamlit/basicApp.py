@@ -94,13 +94,13 @@ if st.button(f'Prédire le niveau de langue avec {model_choice}'):
         prediction = predict1(model, user_input)
         predicted_index = int(prediction[0])
         predicted_level = niveau_langue[predicted_index]
-    elif 'RNN' in model_choice:
-        model_url = f"https://github.com/Oglo/Project-DSML/raw/main/Streamlit/{model_choice}.joblib"
-        model = load_model(model_url)
-        prediction = predict1(model, user_input)
-        predicted_index = int(prediction[0])
-        predicted_level = niveau_langue[predicted_index]
-    elif 'Randome Forest' in model_choice:
+    #elif 'RNN' in model_choice:
+        #model_url = f"https://github.com/Oglo/Project-DSML/raw/main/Streamlit/{model_choice}.joblib"
+        #model = load_model(model_url)
+        #prediction = predict1(model, user_input)
+        #predicted_index = int(prediction[0])
+        #predicted_level = niveau_langue[predicted_index]
+    elif 'Random Forest' in model_choice:
         model_url = f"https://github.com/Oglo/Project-DSML/raw/main/Streamlit/{model_choice}.joblib"
         model = load_model(model_url)
         prediction = predict1(model, user_input)
