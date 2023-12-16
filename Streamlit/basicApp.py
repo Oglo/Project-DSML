@@ -6,8 +6,9 @@ from PIL import Image
 import spacy
 import pandas as pd
 import joblib
+import tensorflow
 
- # Dictionnaire pour mapper les chiffres aux niveaux de langue
+# Dictionnaire pour mapper les chiffres aux niveaux de langue
 niveau_langue = {0: 'A1', 1: 'A2', 2: 'B1', 3: 'B2', 4: 'C1', 5: 'C2'}
 
 # Fonction pour charger le modèle depuis GitHub
@@ -26,14 +27,14 @@ def extract_features(text):
     lexical_diversity = len(set(token.text.lower() for token in doc)) / num_tokens if num_tokens > 0 else 0
     return [avg_sentence_length, lexical_diversity]
 
-# Fonction pour prédire avec Logistic Regression
+
 def predict1(model, text):
     features = extract_features(text)
     features_df = pd.DataFrame([features], columns=['avg_sentence_length', 'lexical_diversity'])
     prediction = model.predict(features_df)
     return prediction
 
-# Fonction pour prédire avec SVC
+
 def predict2(model, vectorizer, text):
     processed_text = vectorizer.transform([text])
     prediction = model.predict(processed_text)
@@ -59,7 +60,7 @@ precision = st.selectbox('Choisissez le pourcentage de précision :', ['30%', '4
 # Charger le modèle et le vectorizer si nécessaire
 model_choice = None
 if precision == '30%':
-    models = ['Random Forest (36%)', 'Spacy (32%)']
+    models = ['Random Forest', 'Spacy (32%)']
 elif precision == '40%':
     models = ['Vector']
 elif precision == '45%':
@@ -88,6 +89,18 @@ if st.button(f'Prédire le niveau de langue avec {model_choice}'):
         prediction = predict2(model, vectorizer, user_input)
         predicted_level = prediction[0]
     elif 'Spacy (32%)' in model_choice:
+        model_url = f"https://github.com/Oglo/Project-DSML/raw/main/Streamlit/{model_choice}.joblib"
+        model = load_model(model_url)
+        prediction = predict1(model, user_input)
+        predicted_index = int(prediction[0])
+        predicted_level = niveau_langue[predicted_index]
+    elif 'RNN' in model_choice:
+        model_url = f"https://github.com/Oglo/Project-DSML/raw/main/Streamlit/{model_choice}.joblib"
+        model = load_model(model_url)
+        prediction = predict1(model, user_input)
+        predicted_index = int(prediction[0])
+        predicted_level = niveau_langue[predicted_index]
+    elif 'Randome Forest' in model_choice:
         model_url = f"https://github.com/Oglo/Project-DSML/raw/main/Streamlit/{model_choice}.joblib"
         model = load_model(model_url)
         prediction = predict1(model, user_input)
