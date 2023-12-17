@@ -12,11 +12,13 @@ In our project focused on predicting the difficulty levels of French texts, Anto
 </p>
 
 Our modeling journey was a blend of academic concepts and practical exploration. Initially, we experimented with models we had learned about in our coursework, like Logistic Regression and Random Forest Classifier. However, we soon realized the limitations of these models in processing text data, as they couldn't fully capture the linguistic nuances needed for our task. This led us to pivot towards more text-focused models. We delved into Spacy for its linguistic feature extraction capabilities and then transitioned to advanced models like RNN and BERT. The RNN was particularly useful for its ability to process text sequentially, while BERT's contextual understanding of language significantly boosted our accuracy.
-A notable aspect of our collaboration was our use of Google Colab. It served as a shared platform where we could both access and test various models. One major challenge we encountered was the significant time required for model execution and training. This aspect occasionally complicated our project's progress. To mitigate this issue, we strategically utilized Google Colab's T4 GPUs instead of regular GPUs. The T4 GPUs offered us better performance and efficiency, enabling us to handle the computational demands more effectively and keep the project moving forward.
+A notable aspect of our collaboration was our use of Google Colab. This platform offers us an opportunity to collaborate on a common file. Within our Colab, we structured our work by attributing a distinct title to each method used, along with its precision displayed on Kaggle. It served as a shared platform where we could both access and test various models. 
+
+One major challenge we encountered was the significant time required for model execution and training. This aspect occasionally complicated our project's progress. To mitigate this issue, we strategically utilized Google Colab's T4 GPUs instead of regular GPUs. The T4 GPUs offered us better performance and efficiency, enabling us to handle the computational demands more effectively and keep the project moving forward.
 
 <p align="center">
     <img src="https://github.com/Oglo/Project-DSML/blob/main/Code/images/TrelloStreamlit.png" alt="Streamlit organization on Trello"
-    width="300"/> 
+    width="600"/> 
 </p>
 
 <p align="center">
