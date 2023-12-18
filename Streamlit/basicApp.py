@@ -9,7 +9,15 @@ import joblib
 import youtube_dl
 import re
 from pytube import YouTube
+import gdown
+import tempfile
 #import tensorflow
+
+def download_model_from_google_drive(file_id):
+    url = f'https://drive.google.com/uc?id={file_id}'
+    with tempfile.NamedTemporaryFile(delete=False) as temp_file:
+        gdown.download(url, temp_file.name, quiet=False)
+        return temp_file.name
 
 
 def download_youtube_subtitles(url):
@@ -20,12 +28,12 @@ def download_youtube_subtitles(url):
     else:
         return "Aucun sous-titre disponible"
     
-    with youtube_dl.YoutubeDL(ydl_opts) as ydl:
-        ydl.download([url])
+   # with youtube_dl.YoutubeDL(ydl_opts) as ydl:
+        #ydl.download([url])
         # Charger et retourner le contenu du fichier de sous-titres
-        with open('temp_subs.fr.vtt', 'r', encoding='utf-8') as file:
-            subtitles = file.read()
-    return subtitles
+        #with open('temp_subs.fr.vtt', 'r', encoding='utf-8') as file:
+           # subtitles = file.read()
+   # return subtitles
 
 # Fonction pour nettoyer les sous-titres
 def clean_subtitles(subtitles):
@@ -93,6 +101,8 @@ elif precision == '40%':
     models = ['Vector']
 elif precision == '45%':
     models = ['Logistic Regression (45%)', 'RNN']
+elif precision == '55%' :
+    models = ['Bert']
 
 # Ajoutez d'autres conditions pour les autres pourcentages
 
@@ -135,6 +145,13 @@ if st.button(f'Prédire le niveau de langue avec {model_choice}'):
         vectorizer = joblib.load(BytesIO(requests.get(vectorizer_url).content))
         prediction = predict2(model, vectorizer, user_input)
         predicted_level = prediction[0]
+    elif 'Bert' in model_choice:
+        file_id = '1ejSpfYKUw8CRpMTk2NwV4QOAAw7OVChr'
+        model_temp_path = download_model_from_google_drive(file_id)
+        model = joblib.load(model_temp_path)
+        prediction = predict1(model, user_input)
+        predicted_index = int(prediction[0])
+        predicted_level = niveau_langue[predicted_index]
     
 
     st.write(f'Niveau de langue prédit: {predicted_level}')
