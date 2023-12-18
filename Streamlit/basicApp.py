@@ -11,13 +11,18 @@ import re
 from pytube import YouTube
 import gdown
 import tempfile
+import torch
 #import tensorflow
 
 def download_model_from_google_drive(file_id):
     url = f'https://drive.google.com/uc?id={file_id}'
     with tempfile.NamedTemporaryFile(delete=False) as temp_file:
         gdown.download(url, temp_file.name, quiet=False)
-        return temp_file.name
+        
+        # Charger le modèle avec torch.load et map_location
+        model = torch.load(temp_file.name, map_location=torch.device('cpu'))
+        
+        return model
 
 
 def download_youtube_subtitles(url):
