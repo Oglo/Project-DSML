@@ -1,80 +1,87 @@
 import streamlit as st
-from joblib import load
-import requests
-from io import BytesIO
-from PIL import Image
-import spacy
-import pandas as pd
 import joblib
-import re
-from pytube import YouTube
-import gdown
+import requests
 import tempfile
+import spacy
+import re
+import nltk
+from nltk.corpus import stopwords
+from nltk.tokenize import word_tokenize
+from nltk.stem import WordNetLemmatizer
+from io import BytesIO
 import torch
-from torch.utils.data import DataLoader, TensorDataset, RandomSampler
-from transformers import BertTokenizer, BertForSequenceClassification, AdamW
-from transformers import get_linear_schedule_with_warmup
+from transformers import BertTokenizer, BertForSequenceClassification
+from PIL import Image
+import gdown
+url = 'https://drive.google.com/uc?id=1ng8ugkZtxQlfkohAcgLLUSVCbkSsg_F8'
+output = 'model_bert.pth'
+gdown.download(url, output, quiet=False)
+nlp = spacy.load('fr_core_news_sm')
+
+
+def encode_sentences(tokenizer, sentences, max_length):
+    input_ids = []
+    attention_masks = []
+
+    for sentence in sentences:
+        encoded_dict = tokenizer.encode_plus(
+            text=sentence,              # Phrase à encoder.
+            add_special_tokens=True,    # Ajoutez '[CLS]' et '[SEP]'
+            max_length=max_length,      # Longueur maximale de la séquence (coupe et pad si nécessaire).
+            pad_to_max_length=True,     # Pad & Truncate toutes les phrases.
+            return_attention_mask=True, # Construire les masques d'attention.
+            return_tensors='pt',        # Renvoie les tensors PyTorch.
+        )
+
+        # Ajoutez l'encodage résultant à la liste.
+        input_ids.append(encoded_dict['input_ids'])
+        attention_masks.append(encoded_dict['attention_mask'])
+
+    # Convertissez les listes en tensors.
+    input_ids = torch.cat(input_ids, dim=0)
+    attention_masks = torch.cat(attention_masks, dim=0)
+
+    return input_ids, attention_masks
 
 
 
-tokenizer = BertTokenizer.from_pretrained('bert-base-multilingual-cased')
 
 
-device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+def predict_with_bert(model, tokenizer, sentence):
+    processed_sentence = preprocess_text(sentence)
+    input_ids, attention_masks = encode_sentences(tokenizer, [processed_sentence], max_length=256)
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-def download_youtube_subtitles(url):
-    yt = YouTube(url)
-    caption = yt.captions.get_by_language_code('fr')
-    if caption:
-        return caption.generate_srt_captions()
-    else:
-        return "Aucun sous-titre disponible"
+    with torch.no_grad():
+        outputs = model(input_ids, token_type_ids=None, attention_mask=attention_masks)
+        predictions = torch.argmax(outputs.logits, dim=1)
     
+    return predictions[0].item()
 
-# Fonction pour nettoyer les sous-titres
-def clean_subtitles(subtitles):
-    # Suppression des balises et des timestamps
-    cleaned = re.sub(r'<[^>]+>', '', subtitles)
-    cleaned = re.sub(r'\d{2}:\d{2}:\d{2}.\d{3} --> \d{2}:\d{2}:\d{2}.\d{3}', '', cleaned)
-    return cleaned
 
-# Dictionnaire pour mapper les chiffres aux niveaux de langue
-niveau_langue = {0: 'A1', 1: 'A2', 2: 'B1', 3: 'B2', 4: 'C1', 5: 'C2'}
 
-# Fonction pour charger le modèle depuis GitHub
-def load_model(url):
-    response = requests.get(url)
-    model = load(BytesIO(response.content))
-    return model
 
-# Fonction pour extraire les caractéristiques du texte
+
+
+
+def preprocess_text(text):
+    text = text.lower()
+    text = re.sub(r'[^a-zàâçéèêëîïôûùüÿñæœ]', ' ', text)
+    words = word_tokenize(text, language='french')
+    words = [word for word in words if word not in stopwords.words('french')]
+    lemmatizer = WordNetLemmatizer()
+    words = [lemmatizer.lemmatize(word) for word in words]
+    return ' '.join(words)
+
+
+
+def convert_to_label(prediction):
+    # Supposons que prediction est un entier correspondant à une classe
+    difficulty_mapping = {0: 'A1', 1: 'A2', 2: 'B1', 3: 'B2', 4: 'C1', 5: 'C2'}
+    return difficulty_mapping.get(prediction[0], "Inconnu")
+
+
+
 def extract_features(text):
-    nlp = spacy.load('fr_core_news_sm')
     doc = nlp(text)
     num_sentences = len(list(doc.sents))
     num_tokens = len(doc)
@@ -83,19 +90,19 @@ def extract_features(text):
     return [avg_sentence_length, lexical_diversity]
 
 
-def predict1(model, text):
-    features = extract_features(text)
-    features_df = pd.DataFrame([features], columns=['avg_sentence_length', 'lexical_diversity'])
-    prediction = model.predict(features_df)
-    return prediction
 
 
-def predict2(model, vectorizer, text):
-    processed_text = vectorizer.transform([text])
-    prediction = model.predict(processed_text)
-    return prediction
 
-# Interface Streamlit
+# Fonction pour charger un modèle depuis GitHub
+def load_model_from_github(url):
+    response = requests.get(url)
+    with tempfile.NamedTemporaryFile(delete=False, suffix='.joblib') as tmp_file:
+        tmp_file.write(response.content)
+        tmp_file.flush()
+        loaded_object = joblib.load(tmp_file.name)
+    return loaded_object
+
+# Interface utilisateur
 logo_url = "https://raw.githubusercontent.com/Oglo/Project-DSML/main/Code/images/logomigros.png"
 logo_yt = "https://raw.githubusercontent.com/Oglo/Project-DSML/main/Code/images/logoyt.png"
 # Télécharger l'image depuis l'URL
@@ -111,102 +118,73 @@ with col2:  # Utilisation de la colonne centrale
     st.markdown("<h1 style='text-align: center'>Team</h1>", unsafe_allow_html=True)    
     st.image(logo_img)
 
-# Sélection du pourcentage de précision
-precision = st.selectbox('Choisissez le pourcentage de précision :', ['30%', '40%', '45%', '55%', '60%'])
 
-# Charger le modèle et le vectorizer si nécessaire
-model_choice = None
-if precision == '30%':
-    models = ['Random Forest', 'Spacy (32%)']
-elif precision == '40%':
-    models = ['Vector']
-elif precision == '45%':
-    models = ['Logistic Regression (45%)', 'RNN']
-elif precision == '55%' :
-    models = ['Bert']
 
-# Ajoutez d'autres conditions pour les autres pourcentages
 
-model_choice = st.selectbox('Choisissez un modèle :', models)
 
-# Zone de texte pour la saisie de la phrase
-user_input = st.text_area("Entrez votre texte ici:")
-
-# Chargement et prédiction du modèle
-if st.button(f'Prédire le niveau de langue avec {model_choice}'):
-    if 'Logistic Regression (45%)' in model_choice:
-        model_url = f"https://github.com/Oglo/Project-DSML/raw/main/Streamlit/{model_choice}.joblib"
-        model = load_model(model_url)
-        prediction = predict1(model, user_input)
-        predicted_index = int(prediction[0])
-        predicted_level = niveau_langue[predicted_index]
-    elif 'Vector' in model_choice:
-        model_url = f"https://github.com/Oglo/Project-DSML/raw/main/Streamlit/{model_choice}.joblib"
-        vectorizer_url = f"https://github.com/Oglo/Project-DSML/raw/main/Streamlit/vectorizer.joblib"  # Assurez-vous que cette URL est correcte
-        model = load_model(model_url)
-        vectorizer = joblib.load(BytesIO(requests.get(vectorizer_url).content))
-        prediction = predict2(model, vectorizer, user_input)
-        predicted_level = prediction[0]
-    elif 'Spacy (32%)' in model_choice:
-        model_url = f"https://github.com/Oglo/Project-DSML/raw/main/Streamlit/{model_choice}.joblib"
-        model = load_model(model_url)
-        prediction = predict1(model, user_input)
-        predicted_index = int(prediction[0])
-        predicted_level = niveau_langue[predicted_index]
-    #elif 'RNN' in model_choice:
-        #model_url = f"https://github.com/Oglo/Project-DSML/raw/main/Streamlit/{model_choice}.joblib"
-        #model = load_model(model_url)
-        #prediction = predict1(model, user_input)
-        #predicted_index = int(prediction[0])
-        #predicted_level = niveau_langue[predicted_index]
-    elif 'Random Forest' in model_choice:
-        model_url = f"https://github.com/Oglo/Project-DSML/raw/main/Streamlit/{model_choice}.joblib"
-        vectorizer_url = f"https://github.com/Oglo/Project-DSML/raw/main/Streamlit/vectorizer.joblib"  # Assurez-vous que cette URL est correcte
-        model = load_model(model_url)
-        vectorizer = joblib.load(BytesIO(requests.get(vectorizer_url).content))
-        prediction = predict2(model, vectorizer, user_input)
-        predicted_level = prediction[0]
-    
+def main():
     
 
-    st.write(f'Niveau de langue prédit: {predicted_level}')
+    # Sélection de la précision du modèle
+    precision = st.selectbox("Choisissez le pourcentage de précision:", ["30%", "40%", "50%", "55%"])
+    model = None
+    vectorizer = None
+    if precision == "30%":
+        model_choice = st.selectbox("Choisissez le modèle:", ["Random Forest"])
+        if model_choice == "Random Forest":
+                model = load_model_from_github("https://github.com/Oglo/Project-DSML/raw/main/Streamlit/Random Forest.joblib")
+                vectorizer = load_model_from_github("https://github.com/Oglo/Project-DSML/raw/main/Streamlit/vectorizer.joblib")
+    
+    elif precision == "40%":
+        model_choice = st.selectbox("Choisissez le modèle:", ["Logistic Regression", "Spacy"])
 
+    elif precision == "50%":
+        model_choice = st.selectbox("Choisissez le modèle:", ["Vector",'Bert'])
+        if model_choice == "Vector":
+                model = load_model_from_github("https://github.com/Oglo/Project-DSML/raw/main/Streamlit/Vector.joblib")
+                vectorizer = load_model_from_github("https://github.com/Oglo/Project-DSML/raw/main/Streamlit/vectorizer.joblib")
+        elif  model_choice == "Bert":
+                tokenizer = BertTokenizer.from_pretrained('bert-base-multilingual-cased')
+                model = BertForSequenceClassification.from_pretrained('bert-base-multilingual-cased', num_labels=6)
+            
+    sentence = st.text_area("Entrez une phrase:")
 
+    # Bouton de prédiction
+    if st.button("Prédire"):
 
+        if  model_choice == "Random Forest":
+                transformed_sentence = vectorizer.transform([sentence])
+                prediction = model.predict(transformed_sentence)
+                difficulty_label = convert_to_label(prediction)
+                st.write(f"Prédiction de la difficulté: {prediction}")
 
-youtube_url = st.text_input("Collez l'URL de la vidéo YouTube ici :")
+        elif model_choice == "Logistic Regression":
+                model = load_model_from_github("https://github.com/Oglo/Project-DSML/raw/main/Streamlit/Logistic Regression (45%).joblib")
+                prediction = model.predict([sentence])  # Assurez-vous que cela correspond au format attendu par le modèle
+                difficulty_label = convert_to_label(prediction)
+                st.write(f"Prédiction de la difficulté: {difficulty_label}")
 
-# Bouton pour déclencher le téléchargement et la prédiction
-st.image(image_yt, caption="Description de l'image")
-if st.button("Extraire et prédire le niveau de langue"):
-    try:
-        subtitles = download_youtube_subtitles(youtube_url)
-        cleaned_subtitles = clean_subtitles(subtitles)
+        elif model_choice == "Spacy":
+                model = load_model_from_github("https://github.com/Oglo/Project-DSML/raw/main/Streamlit/Spacy (32%).joblib")
+                features = extract_features(sentence)
+                prediction = model.predict([features]) # Remplacez 'features' par les caractéristiques extraites
+                difficulty_label = convert_to_label(prediction)
+                st.write(f"Prédiction de la difficulté: {difficulty_label}")
+
+        elif  model_choice == "Vector":
+                processed_sentence = preprocess_text(sentence)
+                transformed_sentence = vectorizer.transform([processed_sentence])
+                prediction = model.predict(transformed_sentence)
+                difficulty_label = convert_to_label(prediction)
+                st.write(f"Prédiction de la difficulté: {prediction}")
+
+        elif model_choice == "Bert":
+                prediction = predict_with_bert(sentence)
+                difficulty_label = convert_to_label(prediction)
+                st.write(f"Prédiction de la difficulté: {difficulty_label}")
         
-        # Utiliser le modèle choisi pour prédire le niveau de langue
-        if 'Logistic Regression (45%)' in model_choice:
-            model_url = f"https://github.com/Oglo/Project-DSML/raw/main/Streamlit/{model_choice}.joblib"
-            model = load_model(model_url)
-            prediction = predict1(model, cleaned_subtitles)
-        elif 'Vector' in model_choice:
-            model_url = f"https://github.com/Oglo/Project-DSML/raw/main/Streamlit/{model_choice}.joblib"
-            vectorizer_url = f"https://github.com/Oglo/Project-DSML/raw/main/Streamlit/vectorizer.joblib"
-            model = load_model(model_url)
-            vectorizer = joblib.load(BytesIO(requests.get(vectorizer_url).content))
-            prediction = predict2(model, vectorizer, cleaned_subtitles)
-        elif 'Spacy (32%)' in model_choice:
-            model_url = f"https://github.com/Oglo/Project-DSML/raw/main/Streamlit/{model_choice}.joblib"
-            model = load_model(model_url)
-            prediction = predict1(model, cleaned_subtitles)
-        elif 'Random Forest' in model_choice:
-            model_url = f"https://github.com/Oglo/Project-DSML/raw/main/Streamlit/{model_choice}.joblib"
-            vectorizer_url = f"https://github.com/Oglo/Project-DSML/raw/main/Streamlit/vectorizer.joblib"
-            model = load_model(model_url)
-            vectorizer = joblib.load(BytesIO(requests.get(vectorizer_url).content))
-            prediction = predict2(model, vectorizer, cleaned_subtitles)
 
-        # Afficher le niveau de langue prédit
-        predicted_level = niveau_langue.get(int(prediction[0]), "Niveau inconnu")
-        st.write(f'Niveau de langue prédit: {predicted_level}')
-    except Exception as e:
-        st.error(f"Une erreur s'est produite : {e}")
+        # Afficher les résultats de la prédiction
+
+if __name__ == "__main__":
+    main()
