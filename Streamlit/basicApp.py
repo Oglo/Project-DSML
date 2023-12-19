@@ -14,63 +14,13 @@ import torch
 from torch.utils.data import DataLoader, TensorDataset, RandomSampler
 from transformers import BertTokenizer, BertForSequenceClassification, AdamW
 from transformers import get_linear_schedule_with_warmup
-from basicApp import preprocess_text
+
 
 
 tokenizer = BertTokenizer.from_pretrained('bert-base-multilingual-cased')
 
 
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-
-def encode_sentences(tokenizer, sentences, max_length):
-    input_ids = []
-    attention_masks = []
-
-    for sentence in sentences:
-        encoded_sent = tokenizer.encode_plus(
-            text=sentence,
-            add_special_tokens=True,
-            max_length=max_length,
-            pad_to_max_length=True,
-            return_attention_mask=True,
-            return_tensors='pt',
-        )
-        input_ids.append(encoded_sent.get('input_ids'))
-        attention_masks.append(encoded_sent.get('attention_mask'))
-
-    input_ids = torch.cat(input_ids, dim=0)
-    attention_masks = torch.cat(attention_masks, dim=0)
-
-    return input_ids, attention_masks
-
-
-
-
-
-BERT_MODEL_URL = 'https://drive.google.com/uc?id=YOUR_FILE_ID'
-
-def load_bert_model_from_drive(model_url):
-    # Télécharge le modèle depuis Google Drive dans un buffer en mémoire
-    buffer = BytesIO()
-    gdown.download(model_url, buffer, quiet=False)
-    
-    # Charger le modèle BERT
-    buffer.seek(0)
-    model = BertForSequenceClassification.from_pretrained('bert-base-multilingual-cased', num_labels=6)
-    model.load_state_dict(torch.load(buffer))
-    model.to(device)
-    return model
-
-# Charger le modèle BERT directement en mémoire
-model = load_bert_model_from_drive(BERT_MODEL_URL)
-
-
-def preprocess_text(text):
-    text = text.lower()  
-    text = re.sub(r'[^\w\s]', '', text)  
-    text = re.sub(r'\d+', '', text)  
-    text = re.sub(r'\s+', ' ', text).strip() 
-    return text
 
 
 
@@ -216,20 +166,7 @@ if st.button(f'Prédire le niveau de langue avec {model_choice}'):
         vectorizer = joblib.load(BytesIO(requests.get(vectorizer_url).content))
         prediction = predict2(model, vectorizer, user_input)
         predicted_level = prediction[0]
-    elif 'Bert' in model_choice:
-         model = load_bert_model_from_drive(BERT_MODEL_URL)
-        # Prétraitement et encodage du texte de l'utilisateur
-         cleaned_text = preprocess_text(user_input)
-         max_length = 256  # Assurez-vous que cela correspond à votre configuration d'entraînement
-         inputs, masks = encode_sentences(tokenizer, [cleaned_text], max_length)
-
-        # Faire la prédiction avec BERT
-         model.eval()
-         with torch.no_grad():
-            outputs = model(inputs.to(device), token_type_ids=None, attention_mask=masks.to(device))
-            logits = outputs[0]
-            predicted_label = torch.argmax(logits, axis=1).cpu().numpy()[0]
-            predicted_difficulty = niveau_langue[predicted_label]
+    
     
 
     st.write(f'Niveau de langue prédit: {predicted_level}')
