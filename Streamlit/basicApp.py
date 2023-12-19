@@ -6,23 +6,95 @@ from PIL import Image
 import spacy
 import pandas as pd
 import joblib
-import youtube_dl
 import re
 from pytube import YouTube
 import gdown
 import tempfile
 import torch
-#import tensorflow
+from torch.utils.data import DataLoader, TensorDataset, RandomSampler
+from transformers import BertTokenizer, BertForSequenceClassification, AdamW
+from transformers import get_linear_schedule_with_warmup
+from basicApp import preprocess_text
 
-def download_model_from_google_drive(file_id):
-    url = f'https://drive.google.com/uc?id={file_id}'
-    with tempfile.NamedTemporaryFile(delete=False) as temp_file:
-        gdown.download(url, temp_file.name, quiet=False)
-        
-        # Charger le modèle avec torch.load et map_location
-        model = torch.load(temp_file.name, map_location=torch.device('cpu'))
-        
-        return model
+
+tokenizer = BertTokenizer.from_pretrained('bert-base-multilingual-cased')
+
+
+device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+
+def encode_sentences(tokenizer, sentences, max_length):
+    input_ids = []
+    attention_masks = []
+
+    for sentence in sentences:
+        encoded_sent = tokenizer.encode_plus(
+            text=sentence,
+            add_special_tokens=True,
+            max_length=max_length,
+            pad_to_max_length=True,
+            return_attention_mask=True,
+            return_tensors='pt',
+        )
+        input_ids.append(encoded_sent.get('input_ids'))
+        attention_masks.append(encoded_sent.get('attention_mask'))
+
+    input_ids = torch.cat(input_ids, dim=0)
+    attention_masks = torch.cat(attention_masks, dim=0)
+
+    return input_ids, attention_masks
+
+
+
+
+
+BERT_MODEL_URL = 'https://drive.google.com/uc?id=YOUR_FILE_ID'
+
+def load_bert_model_from_drive(model_url):
+    # Télécharge le modèle depuis Google Drive dans un buffer en mémoire
+    buffer = BytesIO()
+    gdown.download(model_url, buffer, quiet=False)
+    
+    # Charger le modèle BERT
+    buffer.seek(0)
+    model = BertForSequenceClassification.from_pretrained('bert-base-multilingual-cased', num_labels=6)
+    model.load_state_dict(torch.load(buffer))
+    model.to(device)
+    return model
+
+# Charger le modèle BERT directement en mémoire
+model = load_bert_model_from_drive(BERT_MODEL_URL)
+
+
+def preprocess_text(text):
+    text = text.lower()  
+    text = re.sub(r'[^\w\s]', '', text)  
+    text = re.sub(r'\d+', '', text)  
+    text = re.sub(r'\s+', ' ', text).strip() 
+    return text
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 def download_youtube_subtitles(url):
@@ -33,12 +105,6 @@ def download_youtube_subtitles(url):
     else:
         return "Aucun sous-titre disponible"
     
-   # with youtube_dl.YoutubeDL(ydl_opts) as ydl:
-        #ydl.download([url])
-        # Charger et retourner le contenu du fichier de sous-titres
-        #with open('temp_subs.fr.vtt', 'r', encoding='utf-8') as file:
-           # subtitles = file.read()
-   # return subtitles
 
 # Fonction pour nettoyer les sous-titres
 def clean_subtitles(subtitles):
@@ -151,17 +217,25 @@ if st.button(f'Prédire le niveau de langue avec {model_choice}'):
         prediction = predict2(model, vectorizer, user_input)
         predicted_level = prediction[0]
     elif 'Bert' in model_choice:
-        file_id = '1ejSpfYKUw8CRpMTk2NwV4QOAAw7OVChr'
-        model_temp_path = download_model_from_google_drive(file_id)
-        model = joblib.load(model_temp_path)
-        prediction = predict1(model, user_input)
-        predicted_index = int(prediction[0])
-        predicted_level = niveau_langue[predicted_index]
+         model = load_bert_model_from_drive(BERT_MODEL_URL)
+        # Prétraitement et encodage du texte de l'utilisateur
+         cleaned_text = preprocess_text(user_input)
+         max_length = 256  # Assurez-vous que cela correspond à votre configuration d'entraînement
+         inputs, masks = encode_sentences(tokenizer, [cleaned_text], max_length)
+
+        # Faire la prédiction avec BERT
+         model.eval()
+         with torch.no_grad():
+            outputs = model(inputs.to(device), token_type_ids=None, attention_mask=masks.to(device))
+            logits = outputs[0]
+            predicted_label = torch.argmax(logits, axis=1).cpu().numpy()[0]
+            predicted_difficulty = niveau_langue[predicted_label]
     
 
     st.write(f'Niveau de langue prédit: {predicted_level}')
 
-# Importations supplémentaires
+
+
 
 youtube_url = st.text_input("Collez l'URL de la vidéo YouTube ici :")
 
