@@ -272,13 +272,13 @@ def main():
 
 
 
-
+    st.image(image_yt)
     st.markdown("Now, let's predict subtiles difficulty")
     youtube_url = st.text_input("Past Youtube URL here :")
 
     
             
-    st.image(image_yt)
+    
     if st.button(f"Predict subtiles difficulty with {model_choice}"):
         if youtube_url:
             video_id = extract_video_id_from_url(youtube_url)
