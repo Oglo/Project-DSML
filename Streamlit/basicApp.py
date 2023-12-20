@@ -216,8 +216,8 @@ def main():
             tokenizer = FlaubertTokenizer.from_pretrained('flaubert/flaubert_base_cased')
             prediction_numeric = predict_with_flaubert(sentence, tokenizer, model)
             # Convertissez la prédiction numérique en label de difficulté
-            difficulty_label = convert_to_label[prediction_numeric]  # Utilisez votre propre mapping
-            st.write(f"Difficulty level: {prediction_numeric}")
+            difficulty_label = convert_to_label(prediction_numeric)  # Utilisez votre propre mapping
+            st.write(f"Difficulty level: {difficulty_label}")
             
 
 
