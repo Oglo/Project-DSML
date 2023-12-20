@@ -217,7 +217,7 @@ def main():
         model_choice = st.selectbox("Choose your model:", ['FlauBERT 56,5%'])
         
             
-    sentence = st.text_area("Write your sentence here:")
+    sentence = st.text_area("Write your french sentence here:")
 
     
     if st.button(f"Predict with {model_choice}"):
@@ -286,7 +286,7 @@ def main():
 
 
     st.markdown("Now, let's predict subtiles difficulty")
-    youtube_url = st.text_input("Past Youtube URL here :")
+    youtube_url = st.text_input("Past a french Youtube video URL here :")
 
     
             
