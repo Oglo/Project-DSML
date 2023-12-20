@@ -8,8 +8,15 @@ Here you'll find all the files we've worked on to enable us to have a program th
 
 You can find a YouTube video that explain the project below by clicking on the image :
 
-[![Miniature de la vidéo](https://github.com/Oglo/Project-DSML/blob/main/Code/images/YTVideoImage.jpeg)](https://www.youtube.com/watch?v=o2FGTH8IWBA)
+<p align="center">
+  <a href="https://www.youtube.com/watch?v=o2FGTH8IWBA">
+    <img src="https://github.com/Oglo/Project-DSML/blob/main/Code/images/YTVideoImage.jpeg" alt="Miniature de la vidéo" width="400">
+  </a>
+</p>
 
+<p align="center">
+    <img src="https://github.com/Oglo/Project-DSML/blob/main/Code/images/Table.png" alt="First steps of Trello" width="700"/>
+</p>
  
 
 We are pleased to present this detailed guide to navigating our GitHub repository.
