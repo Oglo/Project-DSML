@@ -26,40 +26,31 @@ def load_rnn_model_and_tokenizer():
     model_url = "https://github.com/Oglo/Project-DSML/raw/main/Streamlit/mon_modele.h5"
     tokenizer_url = "https://github.com/Oglo/Project-DSML/raw/main/Streamlit/tokenizer.joblib"
     
-    rnn_model = load_model_from_github(model_url)
+    rnn_model = load_keras_model_from_github(model_url)
     rnn_tokenizer = load_model_from_github(tokenizer_url)
 
     return rnn_model, rnn_tokenizer
 
 
-
-
 def predict_with_rnn(sentence, tokenizer, model):
-    # Convertir la phrase en séquence
     sequence = tokenizer.texts_to_sequences([sentence])
-    # Pad la séquence
-    padded_sequence = pad_sequences(sequence, maxlen=512)  # Assurez-vous que 512 est la bonne longueur
-    # Prédire avec le modèle
+    padded_sequence = pad_sequences(sequence, maxlen=512)
     prediction = model.predict(padded_sequence)
-    # Convertir la prédiction en label (ajuster selon votre besoin)
     predicted_label = np.argmax(prediction, axis=-1)
     return predicted_label
 
 
 
-
-
 def load_flaubert_model(gdrive_url):
-    file_id = gdrive_url.split('=')[-1]  # Assurez-vous que cette partie extrait correctement l'ID du fichier
+    file_id = gdrive_url.split('=')[-1] 
     destination = 'FlauBERT_model.pth'
     
-    # Utilisation de l'URL complète pour le téléchargement
+    
     gdown.download(url=f"https://drive.google.com/uc?id={file_id}", output=destination, quiet=False)
     
     model = FlaubertForSequenceClassification.from_pretrained('flaubert/flaubert_base_cased', num_labels=6)
     model.load_state_dict(torch.load(destination, map_location=torch.device('cpu')))
     return model
-
 
 
 def predict_with_flaubert(text, tokenizer, model, device):
@@ -70,6 +61,7 @@ def predict_with_flaubert(text, tokenizer, model, device):
     probs = outputs.logits.softmax(1)
     prediction = probs.argmax().item()
     return prediction
+
 
 def download_youtube_transcript(video_id):
     try:
@@ -83,7 +75,6 @@ def download_youtube_transcript(video_id):
     
 
 
-
 def extract_video_id_from_url(url):
     import re
     pattern = r"(?:v=|\/)([0-9A-Za-z_-]{11}).*"
@@ -94,33 +85,29 @@ def extract_video_id_from_url(url):
 
 
 
-
-
 def encode_sentences(tokenizer, sentences, max_length):
     input_ids = []
     attention_masks = []
 
     for sentence in sentences:
         encoded_dict = tokenizer.encode_plus(
-            text=sentence,              # Phrase à encoder.
-            add_special_tokens=True,    # Ajoutez '[CLS]' et '[SEP]'
-            max_length=max_length,      # Longueur maximale de la séquence (coupe et pad si nécessaire).
-            pad_to_max_length=True,     # Pad & Truncate toutes les phrases.
-            return_attention_mask=True, # Construire les masques d'attention.
-            return_tensors='pt',        # Renvoie les tensors PyTorch.
+            text=sentence,              
+            add_special_tokens=True,    
+            max_length=max_length,      
+            pad_to_max_length=True,     
+            return_attention_mask=True, 
+            return_tensors='pt',        
         )
 
-        # Ajoutez l'encodage résultant à la liste.
+        
         input_ids.append(encoded_dict['input_ids'])
         attention_masks.append(encoded_dict['attention_mask'])
 
-    # Convertissez les listes en tensors.
+    
     input_ids = torch.cat(input_ids, dim=0)
     attention_masks = torch.cat(attention_masks, dim=0)
 
     return input_ids, attention_masks
-
-
 
 
 
@@ -134,22 +121,20 @@ def preprocess_text(text):
     return ' '.join(words)
 
 
-
 def convert_to_label(prediction):
-    # Supposons que prediction est un entier correspondant à une classe
+    
     difficulty_mapping = {0: 'A1', 1: 'A2', 2: 'B1', 3: 'B2', 4: 'C1', 5: 'C2'}
     return difficulty_mapping.get(prediction[0], "Inconnu")
 
 
 def convert_to_label_invers(prediction):
-    # Supposons que prediction est un entier correspondant à une classe
+    
     difficulty_mapping_invers =  {'A1': 0, 'A2': 1, 'B1': 2, 'B2': 3, 'C1': 4, 'C2': 5}
-    # Recherchez la clé correspondant à la valeur 'prediction'
+    
     for key, value in difficulty_mapping_invers.items():
         if value == prediction:
             return key
     return "Inconnu"
-
 
 
 def extract_features(text):
@@ -161,9 +146,6 @@ def extract_features(text):
     return [avg_sentence_length, lexical_diversity]
 
 
-
-
-# Fonction pour charger un modèle depuis GitHub
 def load_model_from_github(url):
     response = requests.get(url)
     with tempfile.NamedTemporaryFile(delete=False, suffix='.joblib') as tmp_file:
@@ -173,25 +155,37 @@ def load_model_from_github(url):
     return loaded_object
 
 
+def load_keras_model_from_github(url):
+    response = requests.get(url)
+    with tempfile.NamedTemporaryFile(delete=False, suffix='.h5') as tmp_file:
+        tmp_file.write(response.content)
+        tmp_file.flush()
+        loaded_model = tf.keras.models.load_model(tmp_file.name)
+    return loaded_model
 
 
 
 
 
 
-# Interface utilisateur
+
+
+
+
+
+
 logo_url = "https://raw.githubusercontent.com/Oglo/Project-DSML/main/Code/images/logomigros.png"
 logo_yt = "https://raw.githubusercontent.com/Oglo/Project-DSML/main/Code/images/logoyt.png"
-# Télécharger l'image depuis l'URL
+
 response = requests.get(logo_url)
 logo_img = Image.open(BytesIO(response.content))
 response2 = requests.get(logo_yt)
 image_yt = Image.open(BytesIO(response2.content))
 
-# Création d'une structure de colonnes pour aligner le titre et l'image
+
 col1, col2, col3 = st.columns([1, 2, 1])
 
-with col2:  # Utilisation de la colonne centrale
+with col2:  
     st.markdown("<h1 style='text-align: center'>Team</h1>", unsafe_allow_html=True)    
     st.image(logo_img)
 
@@ -282,7 +276,9 @@ def main():
     st.markdown("Now, let's predict subtiles difficulty")
     youtube_url = st.text_input("Past Youtube URL here :")
 
-    # Bouton de prédiction pour les sous-titres
+    
+            
+    st.image(image_yt)
     if st.button(f"Predict subtiles difficulty with {model_choice}"):
         if youtube_url:
             video_id = extract_video_id_from_url(youtube_url)
@@ -332,6 +328,12 @@ def main():
                     prediction_numeric = predict_with_flaubert(subtitles, tokenizer, model, device)
                     difficulty_mapping_invers = convert_to_label_invers(prediction_numeric)
                     st.write(f"Difficulty level: {difficulty_mapping_invers}")
+
+                elif model_choice == "Reccurent Neural Network 44,7%":
+                    rnn_model, rnn_tokenizer = load_rnn_model_and_tokenizer()
+                    prediction = predict_with_rnn(subtitles, rnn_tokenizer, rnn_model)
+                    difficulty_label = convert_to_label(prediction)
+                    st.write(f"Difficulty level: {difficulty_label}")
 
         else:
             st.error("Please past another URL.")   
