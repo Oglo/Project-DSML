@@ -222,14 +222,9 @@ def main():
                 st.write(f"Difficulty level: {prediction}")
 
         elif model_choice == "FlauBERT":
-            try:
-            # Essayez de charger le modèle depuis GitHub
-                model = load_model_from_github("https://github.com/your_repo/FlauBERT_model.pth")
-            except FileNotFoundError:
-            # Si échec, téléchargez depuis Google Drive
-                gdrive_url = "https://drive.google.com/uc?id=1Sa6u3SUHSVylnNuFoxh-ibQ1mnXH48zx"
-                model = load_flaubert_model(gdrive_url)
-           
+            st.markdown("This model may take a while.")
+            gdrive_url = "https://drive.google.com/uc?id=1Sa6u3SUHSVylnNuFoxh-ibQ1mnXH48zx"
+            model = load_flaubert_model(gdrive_url)
             tokenizer = FlaubertTokenizer.from_pretrained('flaubert/flaubert_base_cased')
             device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
             model.to(device)
