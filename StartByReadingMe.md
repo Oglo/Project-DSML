@@ -19,7 +19,14 @@ We are pleased to present this detailed guide to navigating our GitHub repositor
     
 'Code' Folder: 
 
-    Explore the source code of all our models, complete with explanations of their operation. We recommend reviewing the 'DISCLAIMERS' file for additional information. This folder also includes a sub-folder containing all images used on our GitHub and Streamlit.
+    Explore the source code of all
+    our models, complete
+    with explanations of
+    their operation. We recommend reviewing the 'DISCLAIMERS' file
+    for additional information.
+    This folder also includes a sub-folder
+    containing all images used on our GitHub
+    and Streamlit.
 
 'Data' Folder: 
 
