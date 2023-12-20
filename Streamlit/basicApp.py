@@ -12,7 +12,7 @@ from io import BytesIO
 import torch
 from PIL import Image
 import gdown
-from transformers import FlaubertTokenizer, FlaubertForSequenceClassification
+from transformers import AutoTokenizer as FlaubertTokenizer
 from youtube_transcript_api import YouTubeTranscriptApi
 nlp = spacy.load('fr_core_news_sm')
 
@@ -22,7 +22,7 @@ def load_flaubert_model(gdrive_url):
     file_id = gdrive_url.split('/')[-2]
     destination = 'FlauBERT_model.pth'
     gdown.download(id=file_id, output=destination, quiet=False)
-    model = FlaubertForSequenceClassification.from_pretrained('flaubert/flaubert_base_cased', num_labels=6)
+    model = FlaubertTokenizer.from_pretrained('flaubert/flaubert_base_cased', num_labels=6)
     model.load_state_dict(torch.load(destination))
     return model
 
@@ -177,7 +177,7 @@ def main():
         model_choice = st.selectbox("Choose your model:", ["Logistic Regression", "Spacy"])
 
     elif precision == "50%":
-        model_choice = st.selectbox("Choose your model:", ["Vector", 'FlautBERT'])
+        model_choice = st.selectbox("Choose your model:", ["Vector", 'FlauBERT'])
         
             
     sentence = st.text_area("Write your sentence here:")
@@ -216,14 +216,15 @@ def main():
                 st.write(f"Difficulty level: {prediction}")
 
         elif model_choice == "FlauBERT":
-        # Lien Google Drive pour le modèle FlauBERT
+
             gdrive_url = "https://drive.google.com/file/d/1Sa6u3SUHSVylnNuFoxh-ibQ1mnXH48zx/view?usp=drive_link"
             model = load_flaubert_model(gdrive_url)
             tokenizer = FlaubertTokenizer.from_pretrained('flaubert/flaubert_base_cased')
-            prediction_numeric = predict_with_flaubert(sentence, tokenizer, model)
-            # Convertissez la prédiction numérique en label de difficulté
-            difficulty_label_Flaubert = convert_to_label_invers(prediction_numeric)  # Utilisez votre propre mapping
-            st.write(f"Difficulty level: {difficulty_label_Flaubert}")
+            device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+            model.to(device)
+            prediction_numeric = predict_with_flaubert(sentence, tokenizer, model, device)
+            difficulty_mapping_invers = convert_to_label_invers(prediction_numeric)
+            st.write(f"Difficulty level: {difficulty_mapping_invers}")
             
 
 
