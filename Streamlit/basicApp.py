@@ -19,9 +19,11 @@ from keras.preprocessing.sequence import pad_sequences
 import tensorflow as tf
 
 
+
+#INITIALIZATION OF EVERY DEFINITIONS
+
+
 nlp = spacy.load('fr_core_news_sm')
-
-
 def load_rnn_model_and_tokenizer():
     model_url = "https://github.com/Oglo/Project-DSML/raw/main/Streamlit/mon_modele.h5"
     tokenizer_url = "https://github.com/Oglo/Project-DSML/raw/main/Streamlit/tokenizer.joblib"
@@ -163,6 +165,7 @@ def load_keras_model_from_github(url):
         loaded_model = tf.keras.models.load_model(tmp_file.name)
     return loaded_model
 
+#---------------------------------------------------------------END
 
 
 
@@ -171,8 +174,7 @@ def load_keras_model_from_github(url):
 
 
 
-
-
+#INTERFACE
 
 logo_url = "https://raw.githubusercontent.com/Oglo/Project-DSML/main/Code/images/logomigros.png"
 logo_yt = "https://raw.githubusercontent.com/Oglo/Project-DSML/main/Code/images/logoyt.png"
@@ -189,16 +191,16 @@ with col2:
     st.markdown("<h1 style='text-align: center'>Team</h1>", unsafe_allow_html=True)    
     st.image(logo_img)
 
+#---------------------------------------------------END
 
 
 
-
-
+#MAIN FUNCTIONNALITIES
 
 def main():
     
     model_choice = None
-    # Sélection de la précision du modèle
+    
     precision = st.selectbox("Choose your accurancy:", ["30%", "40%", "50%", "55%"])
     model = None
     vectorizer = None
@@ -217,7 +219,7 @@ def main():
             
     sentence = st.text_area("Write your sentence here:")
 
-    # Bouton de prédiction
+    
     if st.button(f"Predict with {model_choice}"):
 
         if  model_choice == "Random Forest 35%":
@@ -230,14 +232,14 @@ def main():
 
         elif model_choice == "Logistic Regression 45%":
                 model = load_model_from_github("https://github.com/Oglo/Project-DSML/raw/main/Streamlit/Logistic_Regression.joblib")
-                prediction = model.predict([sentence])  # Assurez-vous que cela correspond au format attendu par le modèle
+                prediction = model.predict([sentence]) 
                 difficulty_label = convert_to_label(prediction)
                 st.write(f"Difficulty level: {difficulty_label}")
 
         elif model_choice == "Spacy 33%":
                 model = load_model_from_github("https://github.com/Oglo/Project-DSML/raw/main/Streamlit/Spacy.joblib")
                 features = extract_features(sentence)
-                prediction = model.predict([features]) # Remplacez 'features' par les caractéristiques extraites
+                prediction = model.predict([features]) 
                 difficulty_label = convert_to_label(prediction)
                 st.write(f"Difficulty level: {difficulty_label}")
 
@@ -271,15 +273,15 @@ def main():
 
 
 
-    # Création de colonnes pour l'image et le texte
+    
     col_img, col_text = st.columns([1, 2])
 
     with col_img:
-    # Affichage de l'image avec une largeur spécifique
-        st.image(image_yt, width=150)  # Ajustez la valeur de 'width' selon vos besoins
+    
+        st.image(image_yt, width=150)  
 
     with col_text:
-    # Affichage du texte à droite de l'image
+    
         st.markdown("<h1 style='text-align: left'>YouTube</h1>", unsafe_allow_html=True)
 
 
@@ -297,7 +299,7 @@ def main():
                 st.text_area("Sous-titres:", value=subtitles, height=150)
                 processed_subtitles = preprocess_text(subtitles)
 
-                # Ici, utilisez le modèle choisi pour la prédiction
+                
                 if model_choice == "Logistic Regression 45%":
                      model = load_model_from_github("https://github.com/Oglo/Project-DSML/raw/main/Streamlit/Logistic_Regression.joblib")
                      prediction = model.predict([processed_subtitles])
@@ -316,7 +318,7 @@ def main():
                 elif model_choice == "Spacy 33%":
                     model = load_model_from_github("https://github.com/Oglo/Project-DSML/raw/main/Streamlit/Spacy.joblib")
                     features = extract_features(subtitles)
-                    prediction = model.predict([features]) # Remplacez 'features' par les caractéristiques extraites
+                    prediction = model.predict([features]) 
                     difficulty_label = convert_to_label(prediction)
                     st.write(f"Difficulty level: {difficulty_label}")  
 
@@ -348,7 +350,7 @@ def main():
         else:
             st.error("Please past another URL.")   
 
-      # Utilisation de la colonne centrale
+ #-----------------------------------------------------------END     
        
          
 
