@@ -18,11 +18,12 @@ nlp = spacy.load('fr_core_news_sm')
 
 
 def load_flaubert_model(gdrive_url):
-    file_id = gdrive_url.split('/')[-2]
+    file_id = gdrive_url.split('=')[-1]  # Assurez-vous que cette partie extrait correctement l'ID du fichier
     destination = 'FlauBERT_model.pth'
-    gdown.download(id=file_id, output=destination, quiet=False)
     
-    # Spécifiez map_location pour charger le modèle sur le CPU
+    # Utilisation de l'URL complète pour le téléchargement
+    gdown.download(url=f"https://drive.google.com/uc?id={file_id}", output=destination, quiet=False)
+    
     model = FlaubertForSequenceClassification.from_pretrained('flaubert/flaubert_base_cased', num_labels=6)
     model.load_state_dict(torch.load(destination, map_location=torch.device('cpu')))
     return model
