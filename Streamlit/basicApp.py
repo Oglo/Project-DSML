@@ -209,13 +209,16 @@ def main():
     model = None
     vectorizer = None
     if precision == "30%":
-        model_choice = st.selectbox("Choose your model:", ["Random Forest"])
+        model_choice = st.selectbox("Choose your model:", ["Random Forest 35%", 'Spacy 33%'])
         
     elif precision == "40%":
-        model_choice = st.selectbox("Choose your model:", ["Logistic Regression", "Spacy", 'Reccurent Neural Network'])
+        model_choice = st.selectbox("Choose your model:", ["Logistic Regression 45%", 'Reccurent Neural Network 44,7%', 'Support Vector Machine 42%'])
 
     elif precision == "50%":
-        model_choice = st.selectbox("Choose your model:", ["Vector", 'FlauBERT'])
+        model_choice = st.selectbox("Choose your model:", ["None"])
+
+    elif precision == "55%":
+        model_choice = st.selectbox("Choose your model:", ['FlauBERT 56,5%'])
         
             
     sentence = st.text_area("Write your sentence here:")
@@ -223,7 +226,7 @@ def main():
     # Bouton de prédiction
     if st.button(f"Predict with {model_choice}"):
 
-        if  model_choice == "Random Forest":
+        if  model_choice == "Random Forest 35%":
                 model = load_model_from_github("https://github.com/Oglo/Project-DSML/raw/main/Streamlit/Random_Forest.joblib")
                 vectorizer = load_model_from_github("https://github.com/Oglo/Project-DSML/raw/main/Streamlit/vectorizer.joblib")
                 transformed_sentence = vectorizer.transform([sentence])
@@ -231,20 +234,20 @@ def main():
                 difficulty_label = convert_to_label(prediction)
                 st.write(f"Difficulty level: {prediction}")
 
-        elif model_choice == "Logistic Regression":
+        elif model_choice == "Logistic Regression 45%":
                 model = load_model_from_github("https://github.com/Oglo/Project-DSML/raw/main/Streamlit/Logistic_Regression.joblib")
                 prediction = model.predict([sentence])  # Assurez-vous que cela correspond au format attendu par le modèle
                 difficulty_label = convert_to_label(prediction)
                 st.write(f"Difficulty level: {difficulty_label}")
 
-        elif model_choice == "Spacy":
+        elif model_choice == "Spacy 33%":
                 model = load_model_from_github("https://github.com/Oglo/Project-DSML/raw/main/Streamlit/Spacy.joblib")
                 features = extract_features(sentence)
                 prediction = model.predict([features]) # Remplacez 'features' par les caractéristiques extraites
                 difficulty_label = convert_to_label(prediction)
                 st.write(f"Difficulty level: {difficulty_label}")
 
-        elif  model_choice == "Vector":
+        elif  model_choice == "Support Vector Machine 42%":
                 model = load_model_from_github("https://github.com/Oglo/Project-DSML/raw/main/Streamlit/Vector.joblib")
                 vectorizer = load_model_from_github("https://github.com/Oglo/Project-DSML/raw/main/Streamlit/vectorizer.joblib")
                 processed_sentence = preprocess_text(sentence)
@@ -253,7 +256,7 @@ def main():
                 difficulty_label = convert_to_label(prediction)
                 st.write(f"Difficulty level: {prediction}")
 
-        elif model_choice == "FlauBERT":
+        elif model_choice == "FlauBERT 56,5%":
             st.markdown("This model may take a while.")
             gdrive_url = "https://drive.google.com/uc?id=1Sa6u3SUHSVylnNuFoxh-ibQ1mnXH48zx"
             model = load_flaubert_model(gdrive_url)
@@ -264,7 +267,7 @@ def main():
             difficulty_mapping_invers = convert_to_label_invers(prediction_numeric)
             st.write(f"Difficulty level: {difficulty_mapping_invers}")
             
-        elif model_choice == "Reccurent Neural Network":
+        elif model_choice == "Reccurent Neural Network 44,7%":
             rnn_model, rnn_tokenizer = load_rnn_model_and_tokenizer()
             prediction = predict_with_rnn(sentence, rnn_tokenizer, rnn_model)
             difficulty_label = convert_to_label(prediction)
@@ -289,13 +292,13 @@ def main():
                 processed_subtitles = preprocess_text(subtitles)
 
                 # Ici, utilisez le modèle choisi pour la prédiction
-                if model_choice == "Logistic Regression":
+                if model_choice == "Logistic Regression 45%":
                      model = load_model_from_github("https://github.com/Oglo/Project-DSML/raw/main/Streamlit/Logistic Regression (45%).joblib")
                      prediction = model.predict([processed_subtitles])
                      difficulty_label = convert_to_label(prediction)
                      st.write(f"Difficulty level: {difficulty_label}")
                     
-                elif  model_choice == "Vector":
+                elif  model_choice == "Support Vector Machine 42%":
                     model = load_model_from_github("https://github.com/Oglo/Project-DSML/raw/main/Streamlit/Vector.joblib")
                     vectorizer = load_model_from_github("https://github.com/Oglo/Project-DSML/raw/main/Streamlit/vectorizer.joblib")
                     processed_sentence = preprocess_text(subtitles)
@@ -304,14 +307,14 @@ def main():
                     difficulty_label = convert_to_label(prediction)
                     st.write(f"Difficulty level: {prediction}")
 
-                elif model_choice == "Spacy":
+                elif model_choice == "Spacy 33%":
                     model = load_model_from_github("https://github.com/Oglo/Project-DSML/raw/main/Streamlit/Spacy (32%).joblib")
                     features = extract_features(subtitles)
                     prediction = model.predict([features]) # Remplacez 'features' par les caractéristiques extraites
                     difficulty_label = convert_to_label(prediction)
                     st.write(f"Difficulty level: {difficulty_label}")  
 
-                elif  model_choice == "Random Forest":
+                elif  model_choice == "Random Forest 35%":
                     model = load_model_from_github("https://github.com/Oglo/Project-DSML/raw/main/Streamlit/Random Forest.joblib")
                     vectorizer = load_model_from_github("https://github.com/Oglo/Project-DSML/raw/main/Streamlit/vectorizer.joblib")
                     transformed_sentence = vectorizer.transform([processed_subtitles])
@@ -319,7 +322,7 @@ def main():
                     difficulty_label = convert_to_label(prediction)
                     st.write(f"Difficulty level: {prediction}")  
 
-                elif model_choice == "FlauBERT":
+                elif model_choice == "FlauBERT 56,5%":
 
                     gdrive_url = "https://drive.google.com/uc?id=1Sa6u3SUHSVylnNuFoxh-ibQ1mnXH48zx"
                     model = load_flaubert_model(gdrive_url)
