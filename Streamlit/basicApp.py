@@ -201,14 +201,14 @@ def main():
     
     model_choice = None
     
-    precision = st.selectbox("Choose your accurancy:", ["30%", "40%", "50%", "55%"])
+    precision = st.selectbox("Choose your accuracy:", ["30%", "40%", "50%", "55%"])
     model = None
     vectorizer = None
     if precision == "30%":
         model_choice = st.selectbox("Choose your model:", ["Random Forest 35%", 'Spacy 33%'])
         
     elif precision == "40%":
-        model_choice = st.selectbox("Choose your model:", ["Logistic Regression 45%", 'Reccurent Neural Network 44,7%', 'Support Vector Machine 42%'])
+        model_choice = st.selectbox("Choose your model:", ["Logistic Regression 45%", 'Recurrent Neural Network 44,7%', 'Support Vector Machine 42%'])
 
     elif precision == "50%":
         model_choice = st.selectbox("Choose your model:", ["None"])
@@ -263,7 +263,7 @@ def main():
             difficulty_mapping_invers = convert_to_label_invers(prediction_numeric)
             st.write(f"Difficulty level: {difficulty_mapping_invers}")
             
-        elif model_choice == "Reccurent Neural Network 44,7%":
+        elif model_choice == "Recurrent Neural Network 44,7%":
             rnn_model, rnn_tokenizer = load_rnn_model_and_tokenizer()
             prediction = predict_with_rnn(sentence, rnn_tokenizer, rnn_model)
             difficulty_label = convert_to_label(prediction)
@@ -296,7 +296,7 @@ def main():
             video_id = extract_video_id_from_url(youtube_url)
             if video_id:
                 subtitles = download_youtube_transcript(video_id)
-                st.text_area("Sous-titres:", value=subtitles, height=150)
+                st.text_area("French Subtitles:", value=subtitles, height=150)
                 processed_subtitles = preprocess_text(subtitles)
 
                 
@@ -341,7 +341,7 @@ def main():
                     difficulty_mapping_invers = convert_to_label_invers(prediction_numeric)
                     st.write(f"Difficulty level: {difficulty_mapping_invers}")
 
-                elif model_choice == "Reccurent Neural Network 44,7%":
+                elif model_choice == "Recurrent Neural Network 44,7%":
                     rnn_model, rnn_tokenizer = load_rnn_model_and_tokenizer()
                     prediction = predict_with_rnn(subtitles, rnn_tokenizer, rnn_model)
                     difficulty_label = convert_to_label(prediction)
