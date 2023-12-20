@@ -1,12 +1,15 @@
+#Introduction
+
 In order to find the best model, we had to make multiple assumptions and use
 a lot of differnet models. Of course, some were good and some were catastrophic,
 so in this section, we would like to analyze the worst models that we use and 
 maybe explain why they were so terrible compare to the other ones.
 
 Please, note that if you want to read the analysis about our
-best model you can click on this [[[[[link]]]]] to access it directly.
+best model you can click on this [link](https://github.com/Oglo/Project-DSML/blob/main/Analysis%20of%20the%20models/The%20best%20model)
+ to access it directly.
 
-RandomForestClassifier (accuracy of 36.5%) :
+**RandomForestClassifier (accuracy of 36.5%) :**
 
 Predicting the difficulty of text using RandomForestClassifier faces several difficulties. 
 Firstly, the model lacks context sensitivity; it struggles to grasp the nuances of language,
@@ -25,7 +28,7 @@ unseen texts. Also, the quality and diversity of training data are key.
 A limited dataset might bias the model's learning, affecting the model accuracy.
 
 
-Logitic regression (accuracy of 45.5%) :
+**Logitic regression (accuracy of 45.5%) :**
 
 Using Logistic Regression with TF-IDF for predicting the difficulty of texts also
 presents some difficulties. 
