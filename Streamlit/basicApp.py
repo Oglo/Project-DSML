@@ -12,7 +12,7 @@ from io import BytesIO
 import torch
 from PIL import Image
 import gdown
-from transformers import AutoTokenizer as FlaubertTokenizer
+from transformers import FlaubertTokenizer, FlaubertForSequenceClassification
 from youtube_transcript_api import YouTubeTranscriptApi
 nlp = spacy.load('fr_core_news_sm')
 
@@ -22,7 +22,7 @@ def load_flaubert_model(gdrive_url):
     file_id = gdrive_url.split('/')[-2]
     destination = 'FlauBERT_model.pth'
     gdown.download(id=file_id, output=destination, quiet=False)
-    model = FlaubertTokenizer.from_pretrained('flaubert/flaubert_base_cased', num_labels=6)
+    model = FlaubertForSequenceClassification.from_pretrained('flaubert/flaubert_base_cased', num_labels=6)
     model.load_state_dict(torch.load(destination))
     return model
 
