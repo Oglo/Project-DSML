@@ -271,8 +271,18 @@ def main():
 
 
 
+    # Création de colonnes pour l'image et le texte
+    col_img, col_text = st.columns([1, 2])
 
-    st.image(image_yt)
+    with col_img:
+    # Affichage de l'image avec une largeur spécifique
+        st.image(image_yt, width=150)  # Ajustez la valeur de 'width' selon vos besoins
+
+    with col_text:
+    # Affichage du texte à droite de l'image
+        st.markdown("<h1 style='text-align: left'>YouTube</h1>", unsafe_allow_html=True)
+
+
     st.markdown("Now, let's predict subtiles difficulty")
     youtube_url = st.text_input("Past Youtube URL here :")
 
