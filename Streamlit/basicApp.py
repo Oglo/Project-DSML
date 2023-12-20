@@ -18,12 +18,13 @@ nlp = spacy.load('fr_core_news_sm')
 
 
 def load_flaubert_model(gdrive_url):
-    # ID du fichier Google Drive
     file_id = gdrive_url.split('/')[-2]
     destination = 'FlauBERT_model.pth'
     gdown.download(id=file_id, output=destination, quiet=False)
+    
+    # Spécifiez map_location pour charger le modèle sur le CPU
     model = FlaubertForSequenceClassification.from_pretrained('flaubert/flaubert_base_cased', num_labels=6)
-    model.load_state_dict(torch.load(destination))
+    model.load_state_dict(torch.load(destination, map_location=torch.device('cpu')))
     return model
 
 
@@ -110,7 +111,11 @@ def convert_to_label(prediction):
 def convert_to_label_invers(prediction):
     # Supposons que prediction est un entier correspondant à une classe
     difficulty_mapping_invers =  {'A1': 0, 'A2': 1, 'B1': 2, 'B2': 3, 'C1': 4, 'C2': 5}
-    return difficulty_mapping_invers.get(prediction[0], "Inconnu")
+    # Recherchez la clé correspondant à la valeur 'prediction'
+    for key, value in difficulty_mapping_invers.items():
+        if value == prediction:
+            return key
+    return "Inconnu"
 
 
 
@@ -217,7 +222,7 @@ def main():
 
         elif model_choice == "FlauBERT":
 
-            gdrive_url = "https://drive.google.com/file/d/1Sa6u3SUHSVylnNuFoxh-ibQ1mnXH48zx/view?usp=drive_link"
+            gdrive_url = "https://drive.google.com/uc?id=1Sa6u3SUHSVylnNuFoxh-ibQ1mnXH48zx"
             model = load_flaubert_model(gdrive_url)
             tokenizer = FlaubertTokenizer.from_pretrained('flaubert/flaubert_base_cased')
             device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
@@ -275,6 +280,18 @@ def main():
                     prediction = model.predict(transformed_sentence)
                     difficulty_label = convert_to_label(prediction)
                     st.write(f"Difficulty level: {prediction}")  
+
+                elif model_choice == "FlauBERT":
+
+                    gdrive_url = "https://drive.google.com/uc?id=1Sa6u3SUHSVylnNuFoxh-ibQ1mnXH48zx"
+                    model = load_flaubert_model(gdrive_url)
+                    tokenizer = FlaubertTokenizer.from_pretrained('flaubert/flaubert_base_cased')
+                    device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+                    model.to(device)
+                    prediction_numeric = predict_with_flaubert(subtitles, tokenizer, model, device)
+                    difficulty_mapping_invers = convert_to_label_invers(prediction_numeric)
+                    st.write(f"Difficulty level: {difficulty_mapping_invers}")
+
         else:
             st.error("Please past another URL.")   
 
