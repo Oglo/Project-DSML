@@ -107,6 +107,12 @@ def convert_to_label(prediction):
     return difficulty_mapping.get(prediction[0], "Inconnu")
 
 
+def convert_to_label_invers(prediction):
+    # Supposons que prediction est un entier correspondant à une classe
+    difficulty_mapping_invers =  {'A1': 0, 'A2': 1, 'B1': 2, 'B2': 3, 'C1': 4, 'C2': 5}
+    return difficulty_mapping_invers.get(prediction[0], "Inconnu")
+
+
 
 def extract_features(text):
     doc = nlp(text)
@@ -216,8 +222,8 @@ def main():
             tokenizer = FlaubertTokenizer.from_pretrained('flaubert/flaubert_base_cased')
             prediction_numeric = predict_with_flaubert(sentence, tokenizer, model)
             # Convertissez la prédiction numérique en label de difficulté
-            difficulty_label = convert_to_label(prediction_numeric)  # Utilisez votre propre mapping
-            st.write(f"Difficulty level: {difficulty_label}")
+            difficulty_label_Flaubert = convert_to_label_invers(prediction_numeric)  # Utilisez votre propre mapping
+            st.write(f"Difficulty level: {difficulty_label_Flaubert}")
             
 
 
