@@ -23,7 +23,7 @@ nlp = spacy.load('fr_core_news_sm')
 
 
 def load_rnn_model_and_tokenizer():
-    model_url = "https://github.com/Oglo/Project-DSML/raw/main/Streamlit/RNNModel.joblib"
+    model_url = "https://github.com/Oglo/Project-DSML/raw/main/Streamlit/mon_modele.h5"
     tokenizer_url = "https://github.com/Oglo/Project-DSML/raw/main/Streamlit/tokenizer.joblib"
     
     rnn_model = load_model_from_github(model_url)
@@ -293,7 +293,7 @@ def main():
 
                 # Ici, utilisez le modèle choisi pour la prédiction
                 if model_choice == "Logistic Regression 45%":
-                     model = load_model_from_github("https://github.com/Oglo/Project-DSML/raw/main/Streamlit/Logistic Regression (45%).joblib")
+                     model = load_model_from_github("https://github.com/Oglo/Project-DSML/raw/main/Streamlit/Logistic_Regression.joblib")
                      prediction = model.predict([processed_subtitles])
                      difficulty_label = convert_to_label(prediction)
                      st.write(f"Difficulty level: {difficulty_label}")
@@ -308,14 +308,14 @@ def main():
                     st.write(f"Difficulty level: {prediction}")
 
                 elif model_choice == "Spacy 33%":
-                    model = load_model_from_github("https://github.com/Oglo/Project-DSML/raw/main/Streamlit/Spacy (32%).joblib")
+                    model = load_model_from_github("https://github.com/Oglo/Project-DSML/raw/main/Streamlit/Spacy.joblib")
                     features = extract_features(subtitles)
                     prediction = model.predict([features]) # Remplacez 'features' par les caractéristiques extraites
                     difficulty_label = convert_to_label(prediction)
                     st.write(f"Difficulty level: {difficulty_label}")  
 
                 elif  model_choice == "Random Forest 35%":
-                    model = load_model_from_github("https://github.com/Oglo/Project-DSML/raw/main/Streamlit/Random Forest.joblib")
+                    model = load_model_from_github("https://github.com/Oglo/Project-DSML/raw/main/Streamlit/Random_Forest.joblib")
                     vectorizer = load_model_from_github("https://github.com/Oglo/Project-DSML/raw/main/Streamlit/vectorizer.joblib")
                     transformed_sentence = vectorizer.transform([processed_subtitles])
                     prediction = model.predict(transformed_sentence)
