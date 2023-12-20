@@ -50,7 +50,7 @@ Logistic Regression, Random Forest, SVM: These traditional machine learning mode
 **Recall:** Measures the proportion of actual positives that were identified correctly. High recall indicates the model is good at minimizing false negatives.
 
 <p align="center">
-    <img src="https://github.com/Oglo/Project-DSML/blob/main/Code/images/Table.png" alt="First steps of Trello" width="300"/>
+    <img src="https://github.com/Oglo/Project-DSML/blob/main/Code/images/Table.png" alt="First steps of Trello" width="700"/>
 </p>
 
 In summary, comparing these metrics across different models gave us insight into their strengths and weaknesses. For instance, traditional models like Logistic Regression might show high accuracy but lower recall compared to deep learning models like RNNs or FlauBERT, which can better capture complex patterns in text data.
