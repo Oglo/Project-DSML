@@ -66,4 +66,22 @@ You can contact us by e-mail here :
 <img src="https://raw.githubusercontent.com/Oglo/Project-DSML/main/Code/images/logomail.png" alt="Email Logo" width="35" height="20">      manuel.solazzo@unil.ch
 
 
-HOW TO USE OUR STREAMLIT APPLICATION :
+
+
+
+Then, a detailed guide to enhance your experience with our Streamlit application.
+
+First, launch the basicApp.py file on your local system. This will redirect you to the main page of our application. On this interface, you will have the opportunity to select a specific percentage, which will be used to predict the difficulty level of the desired content. Following this selection, you can choose from a variety of available models the one that best suits your needs.
+
+After selecting your model, a text input area will allow you to enter any text in French. By clicking on the 'Predict' button, the previously selected model will analyze the text and provide an assessment of its difficulty level.
+
+Additionally, our application offers a separate feature for YouTube videos. You will have a second text box where you can paste the URL of a YouTube video. Pressing 'Predict Subtitles' will cause the program to extract and display the entirety of the subtitles from the selected video and assess their difficulty using the model you have chosen beforehand.
+
+We hope this guide will help you navigate our application easily and make the most of its features. 
+
+By the way, if you choose the model FlauBERT, the program may take some time to run because it has to download the model via Google Drive and put it in Github before it can be used.
+We used this process because, as the model is over 100MB, we couldn't commit it directly to our GitHub.
+
+(So, if you decide to try FlauBERT on our streamlit Application, don't commit or push afterwards)
+
+Have fun !

@@ -192,7 +192,7 @@ def main():
     if st.button(f"Predict with {model_choice}"):
 
         if  model_choice == "Random Forest":
-                model = load_model_from_github("https://github.com/Oglo/Project-DSML/raw/main/Streamlit/Random Forest.joblib")
+                model = load_model_from_github("https://github.com/Oglo/Project-DSML/raw/main/Streamlit/Random_Forest.joblib")
                 vectorizer = load_model_from_github("https://github.com/Oglo/Project-DSML/raw/main/Streamlit/vectorizer.joblib")
                 transformed_sentence = vectorizer.transform([sentence])
                 prediction = model.predict(transformed_sentence)
@@ -200,13 +200,13 @@ def main():
                 st.write(f"Difficulty level: {prediction}")
 
         elif model_choice == "Logistic Regression":
-                model = load_model_from_github("https://github.com/Oglo/Project-DSML/raw/main/Streamlit/Logistic Regression (45%).joblib")
+                model = load_model_from_github("https://github.com/Oglo/Project-DSML/raw/main/Streamlit/Logistic_Regression.joblib")
                 prediction = model.predict([sentence])  # Assurez-vous que cela correspond au format attendu par le modèle
                 difficulty_label = convert_to_label(prediction)
                 st.write(f"Difficulty level: {difficulty_label}")
 
         elif model_choice == "Spacy":
-                model = load_model_from_github("https://github.com/Oglo/Project-DSML/raw/main/Streamlit/Spacy (32%).joblib")
+                model = load_model_from_github("https://github.com/Oglo/Project-DSML/raw/main/Streamlit/Spacy.joblib")
                 features = extract_features(sentence)
                 prediction = model.predict([features]) # Remplacez 'features' par les caractéristiques extraites
                 difficulty_label = convert_to_label(prediction)
