@@ -15,3 +15,10 @@ You can contact us by e-mail here :
 
 <img src="https://raw.githubusercontent.com/Oglo/Project-DSML/main/Code/images/logomail.png" alt="Email Logo" width="35" height="20">      manuel.solazzo@unil.ch
 
+HOW TO USE OUR GITHUB : 
+
+
+
+
+
+HOW TO USE OUR STREAMLIT APPLICATION :

@@ -138,23 +138,23 @@ def main():
     
     model_choice = None
     # Sélection de la précision du modèle
-    precision = st.selectbox("Choisissez le pourcentage de précision:", ["30%", "40%", "50%", "55%"])
+    precision = st.selectbox("Choose your accurancy:", ["30%", "40%", "50%", "55%"])
     model = None
     vectorizer = None
     if precision == "30%":
-        model_choice = st.selectbox("Choisissez le modèle:", ["Random Forest"])
+        model_choice = st.selectbox("Choose your model:", ["Random Forest"])
         
     elif precision == "40%":
-        model_choice = st.selectbox("Choisissez le modèle:", ["Logistic Regression", "Spacy"])
+        model_choice = st.selectbox("Choose your model:", ["Logistic Regression", "Spacy"])
 
     elif precision == "50%":
-        model_choice = st.selectbox("Choisissez le modèle:", ["Vector"])
+        model_choice = st.selectbox("Choose your model:", ["Vector"])
         
             
-    sentence = st.text_area("Entrez une phrase:")
+    sentence = st.text_area("Write your sentence here:")
 
     # Bouton de prédiction
-    if st.button("Prédire"):
+    if st.button(f"Predict with {model_choice}"):
 
         if  model_choice == "Random Forest":
                 model = load_model_from_github("https://github.com/Oglo/Project-DSML/raw/main/Streamlit/Random Forest.joblib")
@@ -162,20 +162,20 @@ def main():
                 transformed_sentence = vectorizer.transform([sentence])
                 prediction = model.predict(transformed_sentence)
                 difficulty_label = convert_to_label(prediction)
-                st.write(f"Prédiction de la difficulté: {prediction}")
+                st.write(f"Difficulty level: {prediction}")
 
         elif model_choice == "Logistic Regression":
                 model = load_model_from_github("https://github.com/Oglo/Project-DSML/raw/main/Streamlit/Logistic Regression (45%).joblib")
                 prediction = model.predict([sentence])  # Assurez-vous que cela correspond au format attendu par le modèle
                 difficulty_label = convert_to_label(prediction)
-                st.write(f"Prédiction de la difficulté: {difficulty_label}")
+                st.write(f"Difficulty level: {difficulty_label}")
 
         elif model_choice == "Spacy":
                 model = load_model_from_github("https://github.com/Oglo/Project-DSML/raw/main/Streamlit/Spacy (32%).joblib")
                 features = extract_features(sentence)
                 prediction = model.predict([features]) # Remplacez 'features' par les caractéristiques extraites
                 difficulty_label = convert_to_label(prediction)
-                st.write(f"Prédiction de la difficulté: {difficulty_label}")
+                st.write(f"Difficulty level: {difficulty_label}")
 
         elif  model_choice == "Vector":
                 model = load_model_from_github("https://github.com/Oglo/Project-DSML/raw/main/Streamlit/Vector.joblib")
@@ -184,7 +184,7 @@ def main():
                 transformed_sentence = vectorizer.transform([processed_sentence])
                 prediction = model.predict(transformed_sentence)
                 difficulty_label = convert_to_label(prediction)
-                st.write(f"Prédiction de la difficulté: {prediction}")
+                st.write(f"Difficulty level: {prediction}")
 
 
 
@@ -192,11 +192,11 @@ def main():
 
 
 
-    st.markdown("### Prédiction du Niveau de Langue des Sous-titres YouTube")
-    youtube_url = st.text_input("Entrez l'URL d'une vidéo YouTube ici :")
+    st.markdown("Now, let's predict subtiles difficulty")
+    youtube_url = st.text_input("Past Youtube URL here :")
 
     # Bouton de prédiction pour les sous-titres
-    if st.button("Prédire le Niveau de Langue des Sous-titres"):
+    if st.button(f"Predict subtiles difficulty with {model_choice}"):
         if youtube_url:
             video_id = extract_video_id_from_url(youtube_url)
             if video_id:
@@ -209,13 +209,39 @@ def main():
                      model = load_model_from_github("https://github.com/Oglo/Project-DSML/raw/main/Streamlit/Logistic Regression (45%).joblib")
                      prediction = model.predict([processed_subtitles])
                      difficulty_label = convert_to_label(prediction)
-                     st.write(f"Prédiction de la difficulté: {difficulty_label}")
-                    # Assurez-vous que le modèle Logistic Regression est chargé ici
-                    # ... Logique de prédiction pour Logistic Regression ...
-                # Ajoutez des conditions pour d'autres modèles si nécessaire
+                     st.write(f"Difficulty level: {difficulty_label}")
+                    
+                elif  model_choice == "Vector":
+                    model = load_model_from_github("https://github.com/Oglo/Project-DSML/raw/main/Streamlit/Vector.joblib")
+                    vectorizer = load_model_from_github("https://github.com/Oglo/Project-DSML/raw/main/Streamlit/vectorizer.joblib")
+                    processed_sentence = preprocess_text(subtitles)
+                    transformed_sentence = vectorizer.transform([processed_subtitles])
+                    prediction = model.predict(transformed_sentence)
+                    difficulty_label = convert_to_label(prediction)
+                    st.write(f"Difficulty level: {prediction}")
+
+                elif model_choice == "Spacy":
+                    model = load_model_from_github("https://github.com/Oglo/Project-DSML/raw/main/Streamlit/Spacy (32%).joblib")
+                    features = extract_features(subtitles)
+                    prediction = model.predict([features]) # Remplacez 'features' par les caractéristiques extraites
+                    difficulty_label = convert_to_label(prediction)
+                    st.write(f"Difficulty level: {difficulty_label}")  
+
+                elif  model_choice == "Random Forest":
+                    model = load_model_from_github("https://github.com/Oglo/Project-DSML/raw/main/Streamlit/Random Forest.joblib")
+                    vectorizer = load_model_from_github("https://github.com/Oglo/Project-DSML/raw/main/Streamlit/vectorizer.joblib")
+                    transformed_sentence = vectorizer.transform([processed_subtitles])
+                    prediction = model.predict(transformed_sentence)
+                    difficulty_label = convert_to_label(prediction)
+                    st.write(f"Difficulty level: {prediction}")  
         else:
-            st.error("Veuillez entrer une URL YouTube.")    
+            st.error("Please past another URL.")   
+
+      # Utilisation de la colonne centrale
+       
+         
 
 
 if __name__ == "__main__":
     main()
+
