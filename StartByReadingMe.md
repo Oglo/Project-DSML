@@ -12,20 +12,22 @@ We are pleased to present this detailed guide to navigating our GitHub repositor
 
 -------
 
-'Analysis of the Model' Folder: This primary folder contains a thorough analysis of our various models.
+Analysis of the Model Folder: 
 
-'Erroneous Predictions' File:
+This primary folder contains a thorough analysis of our various models.
+
+Erroneous Predictions File:
+
+- Here, we examine models that did not meet our performance criteria, highlighting the reasons for their insufficient accuracy.
 
 
-Here, we examine models that did not meet our performance criteria, highlighting the reasons for their insufficient accuracy.
+The Best Model File: 
 
+- This document details the model that outperformed others in terms of prediction.
 
-'The Best Model' File: 
+Model's Dashboard File:
 
-This document details the model that outperformed others in terms of prediction.
-'Model's Dashboard' File:
-
-A comprehensive overview of key metrics such as F1-score, recall, accuracy, precision, and the confusion matrix for our most significant models.
+- A comprehensive overview of key metrics such as F1-score, recall, accuracy, precision, and the confusion matrix for our most significant models.
 
 ---
 
