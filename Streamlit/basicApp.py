@@ -14,7 +14,39 @@ from PIL import Image
 import gdown
 from transformers import FlaubertTokenizer, FlaubertForSequenceClassification
 from youtube_transcript_api import YouTubeTranscriptApi
+import numpy as np
+from keras.preprocessing.sequence import pad_sequences
+import tensorflow as tf
+
+
 nlp = spacy.load('fr_core_news_sm')
+
+
+def load_rnn_model_and_tokenizer():
+    model_url = "https://github.com/Oglo/Project-DSML/raw/main/Streamlit/RNNModel.joblib"
+    tokenizer_url = "https://github.com/Oglo/Project-DSML/raw/main/Streamlit/tokenizer.joblib"
+    
+    rnn_model = load_model_from_github(model_url)
+    rnn_tokenizer = load_model_from_github(tokenizer_url)
+
+    return rnn_model, rnn_tokenizer
+
+
+
+
+def predict_with_rnn(sentence, tokenizer, model):
+    # Convertir la phrase en séquence
+    sequence = tokenizer.texts_to_sequences([sentence])
+    # Pad la séquence
+    padded_sequence = pad_sequences(sequence, maxlen=512)  # Assurez-vous que 512 est la bonne longueur
+    # Prédire avec le modèle
+    prediction = model.predict(padded_sequence)
+    # Convertir la prédiction en label (ajuster selon votre besoin)
+    predicted_label = np.argmax(prediction, axis=-1)
+    return predicted_label
+
+
+
 
 
 def load_flaubert_model(gdrive_url):
@@ -180,7 +212,7 @@ def main():
         model_choice = st.selectbox("Choose your model:", ["Random Forest"])
         
     elif precision == "40%":
-        model_choice = st.selectbox("Choose your model:", ["Logistic Regression", "Spacy"])
+        model_choice = st.selectbox("Choose your model:", ["Logistic Regression", "Spacy", 'Reccurent Neural Network'])
 
     elif precision == "50%":
         model_choice = st.selectbox("Choose your model:", ["Vector", 'FlauBERT'])
@@ -232,6 +264,11 @@ def main():
             difficulty_mapping_invers = convert_to_label_invers(prediction_numeric)
             st.write(f"Difficulty level: {difficulty_mapping_invers}")
             
+        elif model_choice == "Reccurent Neural Network":
+            rnn_model, rnn_tokenizer = load_rnn_model_and_tokenizer()
+            prediction = predict_with_rnn(sentence, rnn_tokenizer, rnn_model)
+            difficulty_label = convert_to_label(prediction)
+            st.write(f"Difficulty level: {difficulty_label}")    
 
 
 
