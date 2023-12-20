@@ -6,18 +6,14 @@ Hello everyone, we're Antoine Oglobleff and Manuel Solazzo and we're the Migros 
 
 Here you'll find all the files we've worked on to enable us to have a program that can predict the language level of a French text. We'll also put in all the thoughts that led us to use the right method.
 
-You can find a YouTube video that explain the project below by clicking on the image :
+You can find a YouTube video that explain the project below by clicking on the miniature :
 
 <p align="center">
   <a href="https://www.youtube.com/watch?v=o2FGTH8IWBA">
-    <img src="https://github.com/Oglo/Project-DSML/blob/main/Code/images/YTVideoImage.jpeg" alt="Miniature de la vidéo" width="400">
+    <img src="https://github.com/Oglo/Project-DSML/blob/main/Code/images/YTVideoImage.png" alt="Miniature de la vidéo" width="380">
   </a>
 </p>
 
-<p align="center">
-    <img src="https://github.com/Oglo/Project-DSML/blob/main/Code/images/Table.png" alt="First steps of Trello" width="700"/>
-</p>
- 
 
 We are pleased to present this detailed guide to navigating our GitHub repository.
 
