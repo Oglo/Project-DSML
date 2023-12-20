@@ -6,7 +6,7 @@ Hello everyone, we're Antoine Oglobleff and Manuel Solazzo and we're the Migros 
 
 Here you'll find all the files we've worked on to enable us to have a program that can predict the language level of a French text. We'll also put in all the thoughts that led us to use the right method.
 
-You can find a YouTube video that explain the all project biy clicking [here](https://www.youtube.com/watch?v=o2FGTH8IWBA).
+You can find a YouTube video that explain the project by clicking [here](https://www.youtube.com/watch?v=o2FGTH8IWBA).
 
  
 
