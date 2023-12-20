@@ -12,8 +12,30 @@ from io import BytesIO
 import torch
 from PIL import Image
 import gdown
+from transformers import FlaubertTokenizer, FlaubertForSequenceClassification
 from youtube_transcript_api import YouTubeTranscriptApi
 nlp = spacy.load('fr_core_news_sm')
+
+
+def load_flaubert_model(gdrive_url):
+    # ID du fichier Google Drive
+    file_id = gdrive_url.split('/')[-2]
+    destination = 'FlauBERT_model.pth'
+    gdown.download(id=file_id, output=destination, quiet=False)
+    model = FlaubertForSequenceClassification.from_pretrained('flaubert/flaubert_base_cased', num_labels=6)
+    model.load_state_dict(torch.load(destination))
+    return model
+
+
+
+def predict_with_flaubert(text, tokenizer, model, device):
+    model.eval()
+    inputs = tokenizer(text, return_tensors="pt", max_length=512, truncation=True, padding=True).to(device)
+    with torch.no_grad():
+        outputs = model(**inputs)
+    probs = outputs.logits.softmax(1)
+    prediction = probs.argmax().item()
+    return prediction
 
 def download_youtube_transcript(video_id):
     try:
@@ -24,6 +46,9 @@ def download_youtube_transcript(video_id):
         return full_transcript
     except Exception as e:
         return f"Erreur lors de la récupération des sous-titres: {e}"
+    
+
+
 
 def extract_video_id_from_url(url):
     import re
@@ -32,7 +57,6 @@ def extract_video_id_from_url(url):
     if match:
         return match.group(1)
     return None
-
 
 
 
@@ -61,7 +85,6 @@ def encode_sentences(tokenizer, sentences, max_length):
     attention_masks = torch.cat(attention_masks, dim=0)
 
     return input_ids, attention_masks
-
 
 
 
@@ -148,7 +171,7 @@ def main():
         model_choice = st.selectbox("Choose your model:", ["Logistic Regression", "Spacy"])
 
     elif precision == "50%":
-        model_choice = st.selectbox("Choose your model:", ["Vector"])
+        model_choice = st.selectbox("Choose your model:", ["Vector", 'FlautBERT'])
         
             
     sentence = st.text_area("Write your sentence here:")
@@ -185,6 +208,17 @@ def main():
                 prediction = model.predict(transformed_sentence)
                 difficulty_label = convert_to_label(prediction)
                 st.write(f"Difficulty level: {prediction}")
+
+        elif model_choice == "FlauBERT":
+        # Lien Google Drive pour le modèle FlauBERT
+            gdrive_url = "https://drive.google.com/file/d/1Sa6u3SUHSVylnNuFoxh-ibQ1mnXH48zx/view?usp=drive_link"
+            model = load_flaubert_model(gdrive_url)
+            tokenizer = FlaubertTokenizer.from_pretrained('flaubert/flaubert_base_cased')
+            prediction_numeric = predict_with_flaubert(sentence, tokenizer, model)
+            # Convertissez la prédiction numérique en label de difficulté
+            difficulty_label = convert_to_label[prediction_numeric]  # Utilisez votre propre mapping
+            st.write(f"Difficulty level: {prediction_numeric}")
+            
 
 
 
