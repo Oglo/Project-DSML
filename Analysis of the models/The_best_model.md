@@ -1,1 +1,0 @@
-In this document we will analyze our best model in order to see why it has worked the best among the others, which aspects we neede to take into consideration and the efficiency of the model based on the time of execution needed.
