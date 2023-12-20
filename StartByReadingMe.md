@@ -31,28 +31,28 @@ Model's Dashboard File:
 
 ---
 
-'Code' Folder: 
+Code Folder: 
 
-Explore the source code of all our models, complete with explanations of their operation. We recommend reviewing the 'DISCLAIMERS' file for additional information. This folder also includes a sub-folder containing all images used on our GitHub and Streamlit.
-
-----
-
-'Data' Folder: 
-
-Here, you'll find all the data you provided to us, along with a 'training_data_2' CSV file representing a duplication of the training data.
+- Explore the source code of all our models, complete with explanations of their operation. We recommend reviewing the 'DISCLAIMERS' file for additional information. This folder also includes a sub-folder containing all images used on our GitHub and Streamlit.
 
 ----
 
-'Our Progress' Folder: 
+Data Folder: 
 
-This folder offers an in-depth view of our team's methods and working processes, highlighting efficiency and collaboration within our group.
+- Here, you'll find all the data you provided to us, along with a 'training_data_2' CSV file representing a duplication of the training data.
 
 ----
 
-'Streamlit' Folder:
+Our Progress Folder: 
+
+- This folder offers an in-depth view of our team's methods and working processes, highlighting efficiency and collaboration within our group.
+
+----
+
+Streamlit Folder:
 
 
-Contains the code for our application 'basicApp.py', integrating all the aforementioned models. It serves as the platform for running our application.
+- Contains the code for our application 'basicApp.py', integrating all the aforementioned models. It serves as the platform for running our application.
 
 ----
 
